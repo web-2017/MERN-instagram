@@ -1,9 +1,15 @@
 import express from "express";
 
-const router = express.Router()
 import bcrypt from 'bcryptjs'
 
+import jwt from 'jsonwebtoken'
+
+const router = express.Router()
+
 import User from "../models/user.js";
+
+import {JWT_TOKEN} from "../keys.js";
+
 
 router
     .get('/', (req, res) => {
@@ -18,7 +24,6 @@ router
 
         // Если name не заполнили, то name = email
         // if (email && password && !name) name = email
-
 
         try {
             const checkUser = await User.findOne({email: email})
@@ -53,12 +58,16 @@ router
 
         if (!user) return res.status(422).json({error: `Пользователя с таким email: ${email} не существует`})
 
-        // Сравниваем пароль при логине
+        // сравниваем пароль при логине
         const hashPassword = await bcrypt.compare(password, user.password)
+        // создали token
+        const token = jwt.sign({_id: hashPassword._id}, JWT_TOKEN)
+        // console.log('token', token)
 
         try {
-            if (hashPassword) return res.status(200).json({message: `Добро пожаловать ${user.name || user.email}`})
-            else return res.status(422).json({error: `Неправильный пароль`})
+            if (hashPassword) {
+                return res.status(200).json({message: `Добро пожаловать ${user.name || user.email}`, token: token})
+            } else return res.status(422).json({error: `Неправильный пароль`})
         } catch (e) {
             console.log(e)
         }
