@@ -10,10 +10,12 @@ import User from "../models/user.js";
 
 import {JWT_TOKEN} from "../keys.js";
 
+import requireLogin from "../middleware/requireLogin.js";
+
 
 router
-    .get('/', (req, res) => {
-        res.json('router hello')
+    .get('/protected', requireLogin, (req, res) => {
+        res.json('router protected')
     })
     .post('/signup', async (req, res) => {
 
