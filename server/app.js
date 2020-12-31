@@ -17,10 +17,8 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors());
 app.use(morgan("dev"));
 
-
 const port = PORT || 5000
 
-// Auth
 app.use(auth)
 app.use(post)
 
