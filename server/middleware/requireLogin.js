@@ -17,6 +17,7 @@ export default async (req, res, next) => {
 
         if (!verified) return res.status(401).json({error: "you must be logged in"})
 
+        // Создали user для req.user
         const user = await User.findById(verified.id);
 
         req.user = user
