@@ -8,8 +8,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import auth from "./routes/auth.js";
-
-// import User from "./models/user.js";
+import post from "./routes/post.js";
 
 
 // app.use(express.json())
@@ -23,6 +22,7 @@ const port = PORT || 5000
 
 // Auth
 app.use(auth)
+app.use(post)
 
 // Connection to Mongodb
 try {
