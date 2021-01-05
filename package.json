@@ -1,12 +1,14 @@
 {
   "name": "mern-instagram-indus",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/web-2017/MERN-instagram.git",
-  "author": "web-2017 <zoro987321>",
+  "author": "https://github.com/web-2017",
+  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "front": "cd ./front yarn start"
+    "server": "nodemon server/app.js",
+    "front": "npm start --prefix front",
+    "dev": "concurrently \"npm run server\" \"npm run front\""
   },
   "dependencies": {
     "concurrently": "^5.3.0"
