@@ -1,1 +1,1 @@
-https://www.youtube.com/watch?v=ZyxVDaj2hrc&list=PLB97yPrFwo5g0FQr4rqImKa55F_aPiQWk&index=19
+yarn dev
