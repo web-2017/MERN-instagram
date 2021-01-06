@@ -10,7 +10,6 @@ import morgan from 'morgan'
 import auth from "./routes/auth.js";
 import post from "./routes/post.js";
 
-
 // app.use(express.json())
 app.use(bodyParser.json({limit: "30mb", extended: true}));
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));

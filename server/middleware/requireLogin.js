@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
-import {JWT_TOKEN} from "../keys.js";
-import mongoose from "mongoose";
 
-const User = mongoose.model("User")
+import {JWT_TOKEN} from "../keys.js";
+import User from "../models/user.js";
+
 
 export default async (req, res, next) => {
     const {authorization} = req.headers

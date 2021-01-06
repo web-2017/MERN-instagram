@@ -10,7 +10,6 @@ import Profile from "./screens/Profile";
 import Signup from "./screens/Signup";
 import CreatePost from "./screens/CreatePost";
 
-
 function App() {
     return (
         <Router>
