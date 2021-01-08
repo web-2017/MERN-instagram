@@ -50,16 +50,18 @@ export const signInUser = async (req, res) => {
     const user = await User.findOne({email: email})
 
     if (!user) return res.status(422).json({error: `Пользователя с таким email: ${email} не существует`})
-
-    // сравниваем пароль при логине
-    const hashPassword = await bcrypt.compare(password, user.password)
-    // создали token
-    const token = jwt.sign({id: user._id}, JWT_TOKEN);
-
     try {
+        // сравниваем пароль при логине
+        const hashPassword = await bcrypt.compare(password, user.password)
+        // создали token
+        const token = jwt.sign({id: user._id}, JWT_TOKEN);
+
         if (hashPassword) {
-            return res.status(200).json({message: `Добро пожаловать ${user.name || user.email}`, token, id: user._id,})
-        } else return res.status(422).json({error: `Неправильный пароль`})
+            const {name, email, _id} = user
+            return res.status(200).json({message: `Добро пожаловать ${name || email}`, token, id: _id,})
+        } else {
+            return res.status(422).json({error: `Неправильный пароль`})
+        }
     } catch (e) {
         console.log(e)
     }

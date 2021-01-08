@@ -1,12 +1,13 @@
 import React, {useState} from "react";
 import {Link, useHistory} from 'react-router-dom'
+import log from 'loglevel'
 
 import Toast from "../components/Toast";
 import {PUBLIC_URL} from "../config/KEYS";
 
 import {validateEmail} from "../helpers/validateEmail";
-
 export default () => {
+
     const history = useHistory()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -34,16 +35,17 @@ export default () => {
                 body: JSON.stringify(data)
             })
             const result = await response.json()
-            console.log('result', result)
+            log.info('Поздравляем. ', result)
             if (result.error) {
                 Toast(result.error, true)
+                log.error(11, result)
             } else {
                 Toast(`Добро пожаловать!`)
                 history.push('/signin')
             }
 
         } catch (e) {
-            console.log(e)
+            log.error(e)
         }
     }
 
