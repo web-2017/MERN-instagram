@@ -1,7 +1,7 @@
 import Post from "../models/post.js";
 
+export const allPostsController = async (req, res) => {
 
-export const PostsController =async (req, res) => async (req, res) => {
     /**
      *  Получили все posts, postedBy
      *  postedBy - сортировка по полю,
@@ -17,7 +17,6 @@ export const PostsController =async (req, res) => async (req, res) => {
 
 export const createPostController = async (req, res) => {
     const {title, body, image} = req.body
-    console.log(123, image)
     if (!title || !body || !image) return res.status(422).json({error: 'Все поля обязательны для заполнения'})
 
     // remove unused keys
@@ -32,7 +31,7 @@ export const createPostController = async (req, res) => {
     }
 }
 
-export const PostController =async (req, res) => {
+export const PostController = async (req, res) => {
     const posts = await Post.find({postedBy: req.user._id}).populate('postedBy', "_id name")
     res.json(posts)
 }

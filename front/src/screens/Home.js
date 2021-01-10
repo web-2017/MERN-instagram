@@ -1,47 +1,58 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
+import loglevel from '../middleware/loglevel'
 import {HomeContainer, HomeCard, CardImage, CardContent} from "../assets/HomeStyle";
+import {PUBLIC_URL} from "../config/KEYS";
 
 const Home = () => {
-    const urlImage = 'https://images.unsplash.com/photo-1598128558393-70ff21433be0?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTN8fHdhbGxwZXJzfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        postData()
+    }, [])
+
+    const postData = async () => {
+
+        try {
+            const response = await fetch(`${PUBLIC_URL}/allposts`, {
+                method: 'get',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            })
+
+            const result = await response.json()
+
+            setData(result)
+
+            loglevel.debug(result)
+
+        } catch (e) {
+            loglevel.error(e)
+        }
+    }
+
     return (
         <HomeContainer>
-            <HomeCard className="card">
-                <h5>Ivan</h5>
-                <CardImage>
-                    <img src={urlImage} alt=""/>
-                </CardImage>
-                <CardContent>
-                    <i className="Small material-icons">favorite</i>
-                    <h6>title</h6>
-                    <p>this is a post</p>
-                    <input type="text" placeholder='add comment'/>
-                </CardContent>
-            </HomeCard>
-            <HomeCard className="card">
-                <h5>Ivan</h5>
-                <CardImage>
-                    <img src={urlImage} alt=""/>
-                </CardImage>
-                <CardContent>
-                    <i className="Small material-icons">favorite</i>
-                    <h6>title</h6>
-                    <p>this is a post</p>
-                    <input type="text" placeholder='add comment'/>
-                </CardContent>
-            </HomeCard>
-            <HomeCard className="card">
-                <h5>Ivan</h5>
-                <CardImage>
-                    <img src={urlImage} alt=""/>
-                </CardImage>
-                <CardContent>
-                    <i className="Small material-icons">favorite</i>
-                    <h6>title</h6>
-                    <p>this is a post</p>
-                    <input type="text" placeholder='add comment'/>
-                </CardContent>
-            </HomeCard>
+            {
+                data.map(post => {
+                    return (
+                        <HomeCard key={post._id} className="card">
+                            <h5>{post.postedBy.name}</h5>
+                            <CardImage>
+                                <img style={{width: '100%'}} src={post.image} alt=""/>
+                            </CardImage>
+                            <CardContent>
+                                <i className="Small material-icons">favorite</i>
+                                <h6>{post.title}</h6>
+                                <p>{post.body}</p>
+                                <input type="text" placeholder='add comment'/>
+                            </CardContent>
+                        </HomeCard>
+                    )
+                })
+            }
+
         </HomeContainer>
     )
 }

@@ -55,11 +55,12 @@ export default () => {
                 },
                 body: JSON.stringify(options)
             })
+
             const result = await response.json()
 
             if (result.error) {
                 Toast(result.error, true)
-                loglevel.error(result)
+                loglevel.debug(result)
             } else {
                 Toast(`Создали пост!`)
                 history.push('/')
