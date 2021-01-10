@@ -12,7 +12,6 @@
     "kill": "concurrently -k"
   },
   "dependencies": {
-    "concurrently": "^5.3.0",
-    "loglevel": "^1.7.1"
+    "concurrently": "^5.3.0"
   }
 }

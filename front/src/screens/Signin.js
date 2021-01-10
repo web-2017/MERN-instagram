@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {validateEmail} from "../helpers/validateEmail";
-import loglevel from "../middleware/logger";
+import loglevel from "../middleware/loglevel";
 import Toast from "../components/Toast";
 import {PUBLIC_URL} from "../config/KEYS";
 
