@@ -5,7 +5,8 @@ import log from 'loglevel'
 import Toast from "../components/Toast";
 import {PUBLIC_URL} from "../config/KEYS";
 
-import {validateEmail} from "../helpers/validateEmail";
+import {validateEmail} from "../utils/validateEmail";
+
 export default () => {
 
     const history = useHistory()

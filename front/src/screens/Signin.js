@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Link, useHistory} from "react-router-dom";
-import {validateEmail} from "../helpers/validateEmail";
+import {validateEmail} from "../utils/validateEmail";
 import loglevel from "../middleware/loglevel";
 import Toast from "../components/Toast";
 import {PUBLIC_URL} from "../config/KEYS";
@@ -16,11 +16,9 @@ export default () => {
 
         // check email and password
         if (!validateEmail(email)) {
-            Toast(`Не правильный Email`, true)
-            return
+            return Toast(`Не правильный Email`, true)
         } else if (password.length < 5) {
-            Toast(`Пароль должен быть больше 5 символов!`, true)
-            return
+            return Toast(`Пароль должен быть больше 5 символов!`, true)
         }
 
         try {
@@ -40,6 +38,9 @@ export default () => {
             } else {
                 Toast(`Добро пожаловать!`)
                 loglevel.info(result)
+                const {token, user} = result
+                localStorage.setItem('token', token)
+                localStorage.setItem('user', JSON.stringify(user))
                 history.push('/')
             }
 
@@ -64,7 +65,7 @@ export default () => {
                        onChange={(e) => setPassword(e.target.value)}
                 />
                 <button className="btn waves-effect waves-light blue darken-2" type="submit"
-                    onClick={SignInPostData}
+                        onClick={SignInPostData}
                 >
                     Login
                 </button>

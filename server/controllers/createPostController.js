@@ -17,6 +17,7 @@ export const PostsController =async (req, res) => async (req, res) => {
 
 export const createPostController = async (req, res) => {
     const {title, body, image} = req.body
+    console.log(123, image)
     if (!title || !body || !image) return res.status(422).json({error: 'Все поля обязательны для заполнения'})
 
     // remove unused keys

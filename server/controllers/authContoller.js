@@ -58,7 +58,7 @@ export const signInUser = async (req, res) => {
 
         if (hashPassword) {
             const {name, email, _id} = user
-            return res.status(200).json({message: `Добро пожаловать ${name || email}`, token, id: _id,})
+            return res.status(200).json({message: `Добро пожаловать ${name || email}`, token, id: _id, user: {name, email, id: _id}})
         } else {
             return res.status(422).json({error: `Неправильный пароль`})
         }
