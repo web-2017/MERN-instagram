@@ -31,7 +31,7 @@ export const createPostController = async (req, res) => {
     }
 }
 
-export const PostController = async (req, res) => {
-    const posts = await Post.find({postedBy: req.user._id}).populate('postedBy', "_id name")
+export const myPosts = async (req, res) => {
+    const posts = await Post.find({postedBy: req.user._id}).populate('postedBy', "_id")
     res.json(posts)
 }

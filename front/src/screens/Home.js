@@ -31,8 +31,6 @@ const Home = () => {
             loglevel.error(e)
         }
     }
-
-
     return (
         <HomeContainer>
             {
@@ -53,7 +51,6 @@ const Home = () => {
                     )
                 })
             }
-
         </HomeContainer>
     )
 }

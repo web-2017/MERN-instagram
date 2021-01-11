@@ -1,21 +1,58 @@
-import React from "react";
+import React, {useEffect, useState, useContext} from "react";
+import {UserContext} from "../App";
 
 // styles
-import {ImageAvatar, ProfileContainer, ProfileHeader, ProfileFollowerContainer, GalleryContainer, GalleryItem} from "../assets/ProfileStyles";
+import {
+    ImageAvatar,
+    ProfileContainer,
+    ProfileHeader,
+    ProfileFollowerContainer,
+    GalleryContainer,
+    GalleryItem
+} from "../assets/ProfileStyles";
+import {PUBLIC_URL} from "../config/KEYS";
+import loglevel from "../middleware/loglevel";
 
 export default () => {
-    const imgUrl = 'https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfDJ8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+    const [posts, setPosts] = useState([])
+    const {state, dispatch} = useContext(UserContext)
+
+
+    useEffect(() => {
+        getMyPost()
+    }, [])
+
+    const getMyPost = async () => {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/mypost`, {
+                method: 'get',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            })
+
+            const result = await response.json()
+
+            setPosts(result)
+
+            loglevel.debug(result)
+
+        } catch (e) {
+            loglevel.error(e)
+        }
+    }
+
     return (
         <ProfileContainer>
             <ProfileHeader>
                 <div>
                     <div>
-                        <ImageAvatar src={imgUrl} alt=""/>
+                        <ImageAvatar alt=""/>
                     </div>
                 </div>
 
                 <div>
-                    <h4>Mario Magomedov</h4>
+                    <h4>{state && state.name}</h4>
                     <ProfileFollowerContainer>
                         <h6>40 posts</h6>
                         <h6>40 followers</h6>
@@ -24,12 +61,9 @@ export default () => {
                 </div>
             </ProfileHeader>
             <GalleryContainer>
-                <GalleryItem src={imgUrl}/>
-                <GalleryItem src={imgUrl}/>
-                <GalleryItem src={imgUrl}/>
-                <GalleryItem src={imgUrl}/>
-                <GalleryItem src={imgUrl}/>
-                <GalleryItem src={imgUrl}/>
+                {posts.map(post => (
+                    <GalleryItem key={post._id} src={post.image} alt={post.title}/>
+                ))}
             </GalleryContainer>
         </ProfileContainer>
     )

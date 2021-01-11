@@ -25,7 +25,7 @@ export const ProfileFollowerContainer = styled.div`
 export const GalleryContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   max-width: 932px;
   margin: 0 auto;
 `

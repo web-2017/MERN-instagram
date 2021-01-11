@@ -38,10 +38,11 @@ export default () => {
                 Toast(result.error, true)
                 loglevel.error(result)
             } else {
-                Toast(`Добро пожаловать!`)
                 loglevel.info(result)
 
                 const {token, user} = result
+
+                Toast(`Добро пожаловать! ${user.name}`)
 
                 localStorage.setItem('token', token)
                 localStorage.setItem('user', JSON.stringify(user))

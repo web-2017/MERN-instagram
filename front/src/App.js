@@ -14,8 +14,6 @@ import {reducer, initialState} from "./store/userReducer";
 
 export const UserContext = createContext()
 
-// 24
-
 const Routing = () => {
     const history = useHistory()
     const {state, dispatch} = useContext(UserContext)
@@ -24,7 +22,6 @@ const Routing = () => {
         const user = JSON.parse(localStorage.getItem('user'))
         if (user) {
             dispatch({type: 'USER', payload: user})
-            history.push('/')
         } else {
             history.push('/signin')
         }
