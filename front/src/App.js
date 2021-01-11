@@ -14,6 +14,8 @@ import {reducer, initialState} from "./store/userReducer";
 
 export const UserContext = createContext()
 
+// 24
+
 const Routing = () => {
     const history = useHistory()
     const {state, dispatch} = useContext(UserContext)
