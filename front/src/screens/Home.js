@@ -32,6 +32,7 @@ const Home = () => {
         }
     }
 
+
     return (
         <HomeContainer>
             {
