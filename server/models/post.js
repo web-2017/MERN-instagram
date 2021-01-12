@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const {ObjectId} = mongoose.Schema.Types
 
+
 const postSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -11,6 +12,9 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    likes: [{
+        type: ObjectId, ref: 'User',
+    }],
     image: {
         type: String,
         required: true

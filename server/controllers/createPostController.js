@@ -35,3 +35,26 @@ export const myPosts = async (req, res) => {
     const posts = await Post.find({postedBy: req.user._id}).populate('postedBy', "_id")
     res.json(posts)
 }
+
+export const likePostController = async (req, res) => {
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push: {likes: req.user._id}
+    }, {
+        new: true
+    }).exec((err, result) => {
+        if (err) return res.status(422).json({error: err})
+        else return res.json(result)
+    })
+}
+
+export const unLikePostController = async (req, res) => {
+    Post.findByIdAndUpdate(req.body.postId, {
+        $pull: {likes: req.user._id}
+    }, {
+        new: true
+    }).exec((err, result) => {
+        if (err) return res.status(422).json({error: err})
+        else return res.json(result)
+    })
+}
+

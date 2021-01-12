@@ -17,6 +17,8 @@ export default () => {
     const [posts, setPosts] = useState([])
     const {state, dispatch} = useContext(UserContext)
 
+    const fakeImage = 'https://images.unsplash.com/photo-1489875347897-49f64b51c1f8?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+
 
     useEffect(() => {
         getMyPost()
@@ -47,7 +49,7 @@ export default () => {
             <ProfileHeader>
                 <div>
                     <div>
-                        <ImageAvatar alt=""/>
+                        <ImageAvatar src={fakeImage} alt=""/>
                     </div>
                 </div>
 
