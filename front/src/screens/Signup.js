@@ -5,7 +5,7 @@ import log from 'loglevel'
 import Toast from "../components/Toast";
 import {PUBLIC_URL} from "../config/KEYS";
 
-import {validateEmail} from "../utils/validateEmail";
+import {validateEmail} from "../filters/validateEmail";
 
 export default () => {
 

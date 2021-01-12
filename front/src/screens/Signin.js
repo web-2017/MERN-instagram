@@ -1,7 +1,7 @@
 import React, {useState, useContext} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {UserContext} from "../App";
-import {validateEmail} from "../utils/validateEmail";
+import {validateEmail} from "../filters/validateEmail";
 import loglevel from "../middleware/loglevel";
 import Toast from "../components/Toast";
 import {PUBLIC_URL} from "../config/KEYS";
