@@ -37,14 +37,13 @@ export const myPosts = async (req, res) => {
 }
 
 export const likePostController = async (req, res) => {
-    Post.findByIdAndUpdate(req.body.postId, {
-        $push: {likes: req.user._id}
-    }, {
-        new: true
-    }).exec((err, result) => {
-        if (err) return res.status(422).json({error: err})
-        else return res.json(result)
-    })
+
+    Post.findByIdAndUpdate(req.body.postId, {$push: {likes: req.user._id}}, {new: true})
+        .exec((err, result) => {
+            if (err) return res.status(422).json({error: err})
+            else return res.json(result)
+        })
+
 }
 
 export const unLikePostController = async (req, res) => {
