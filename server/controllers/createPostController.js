@@ -1,7 +1,6 @@
 import Post from "../models/post.js";
 
 export const allPostsController = async (req, res) => {
-
     /**
      *  Получили все posts, postedBy
      *  postedBy - сортировка по полю,
@@ -37,13 +36,11 @@ export const myPosts = async (req, res) => {
 }
 
 export const likePostController = async (req, res) => {
-
     Post.findByIdAndUpdate(req.body.postId, {$push: {likes: req.user._id}}, {new: true})
         .exec((err, result) => {
             if (err) return res.status(422).json({error: err})
             else return res.json(result)
         })
-
 }
 
 export const unLikePostController = async (req, res) => {
@@ -55,5 +52,21 @@ export const unLikePostController = async (req, res) => {
         if (err) return res.status(422).json({error: err})
         else return res.json(result)
     })
+}
+export const commentPostController = async (req, res) => {
+    const comment = {
+        text: req.body.text,
+        postedBy: req.user._id
+    }
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push: {comments: comment}
+    }, {
+        new: true
+    })
+        .populate('comments.postedBy', '_id name')
+        .exec((err, result) => {
+            if (err) return res.status(422).json({error: err})
+            else return res.json(result)
+        })
 }
 
