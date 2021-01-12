@@ -7,7 +7,9 @@ export const allPostsController = async (req, res) => {
      *  select - какие поля будут видны
      */
     try {
-        const posts = await Post.find().populate('postedBy', "_id name")
+        const posts = await Post.find()
+            .populate("postedBy", "_id name")
+            .populate("comments.postedBy", "_id name")
         res.json(posts)
     } catch (e) {
         console.log(e)
@@ -31,7 +33,9 @@ export const createPostController = async (req, res) => {
 }
 
 export const myPosts = async (req, res) => {
-    const posts = await Post.find({postedBy: req.user._id}).populate('postedBy', "_id")
+    const posts = await Post.find({postedBy: req.user._id})
+        .populate('postedBy', "_id")
+        .populate('comments.postedBy', "_id name")
     res.json(posts)
 }
 
@@ -53,6 +57,7 @@ export const unLikePostController = async (req, res) => {
         else return res.json(result)
     })
 }
+
 export const commentPostController = async (req, res) => {
     const comment = {
         text: req.body.text,
@@ -64,9 +69,26 @@ export const commentPostController = async (req, res) => {
         new: true
     })
         .populate('comments.postedBy', '_id name')
+        .populate('postedBy', "_id")
+
         .exec((err, result) => {
             if (err) return res.status(422).json({error: err})
-            else return res.json(result)
+            else return res.status(200).json(result)
         })
 }
 
+export const deletePostController = async (req, res) => {
+    Post.findOne({_id: req.params.postId})
+        .populate("postedBy", "_id")
+        .exec((err, post) => {
+            if (err || !post) return res.status(422).json({error: err})
+            if (post.postedBy._id.toString() === req.user._id.toString()) {
+                post.remove()
+                    .then(result => {
+                        res.json(result)
+                    }).catch(err => {
+                    console.log(err)
+                })
+            }
+        })
+}
