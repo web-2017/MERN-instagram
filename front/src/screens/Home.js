@@ -1,18 +1,31 @@
 import React, {useState, useEffect, useContext} from "react";
 
-import loglevel from '../middleware/loglevel'
+import HomeCrudClass from '../components/home/HomeCrudClass'
+
 import {HomeContainer, HomeCard, CardImage, CardContent} from "../assets/HomeStyle";
-import {PUBLIC_URL} from "../config/KEYS";
+
 import {UserContext} from "../App";
 
 const Home = () => {
-    const {state, dispatch} = useContext(UserContext)
+    const CreateHomeCrud = new HomeCrudClass(`Bearer ${localStorage.getItem('token')}`)
+
+    const {state} = useContext(UserContext)
     const [data, setData] = useState([])
 
     useEffect(() => {
-        postData()
+        const getData = async () => {
+            const newData = await CreateHomeCrud.getPosts()
+            setData(newData)
+        }
+        getData()
     }, [])
 
+    /**
+     *
+     * @param prevData - data
+     * @param res - result of response.json
+     * @returns {[data] | [res]}
+     */
     const newPostData = (prevData = [], res = []) => {
         const data = prevData.map(item => {
             if (item._id === res._id) {
@@ -24,118 +37,33 @@ const Home = () => {
         return data
     }
 
-    const postData = async () => {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/allposts`, {
-                method: 'get',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-            })
-
-            const result = await response.json()
-
-            setData(result)
-
-            loglevel.debug(result)
-
-        } catch (e) {
-            loglevel.error(e)
-        }
-    }
-
+    // like post func
     const likePostHandler = async (id) => {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/like`, {
-                method: 'put',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    postId: id
-                })
-            })
-
-            const result = await response.json()
-
-            setData(newPostData(data, result))
-
-            loglevel.debug(result)
-
-        } catch (e) {
-            loglevel.error(e)
-        }
+        const like = await CreateHomeCrud.likePostHandler(id)
+        setData(newPostData(data, like))
     }
 
+    // unlike post func
     const unLikePostHandler = async (id) => {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/unlike`, {
-                method: 'put',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    postId: id
-                })
-            })
-
-            const result = await response.json()
-
-            setData(newPostData(data, result))
-
-            loglevel.debug(result)
-
-        } catch (e) {
-            loglevel.error(e)
-        }
+        const unLike = await CreateHomeCrud.unLikePostHandler(id)
+        setData(newPostData(data, unLike))
     }
 
+    // create comments
     const makeComment = async (text, postId) => {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/comment`, {
-                method: 'put',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({postId, text})
-            })
-
-            const result = await response.json()
-
-            setData(newPostData(data, result))
-
-            loglevel.debug(result)
-
-        } catch (e) {
-            loglevel.error(e)
-        }
+        const comment = await CreateHomeCrud.makeComment(text, postId)
+        setData(newPostData(data, comment))
     }
 
+    // delete comments
     const deletePost = async (postId) => {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/deletepost/${postId}`, {
-                method: 'delete',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-            })
+        const post = await CreateHomeCrud.deletePost(postId)
 
-            const result = await response.json()
+        const filterData = data.filter(item => {
+            return item._id != post._id
+        })
 
-            const filterData = data.filter(item => {
-                return item._id != result._id
-            })
-
-            setData(filterData)
-
-            loglevel.debug(result)
-
-        } catch (e) {
-            loglevel.error(e)
-        }
+        setData(filterData)
     }
 
     return (
