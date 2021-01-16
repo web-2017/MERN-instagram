@@ -3,17 +3,17 @@ import loglevel from "../../middleware/loglevel";
 
 class HomeCrudClass {
     constructor(token) {
-        this.token = token || `Bearer ${localStorage.getItem('token')}`
-        this.allPostUrl = 'allposts'
+        this.header = {
+            'Content-type': 'application/json',
+            'Authorization': token || `Bearer ${localStorage.getItem('token')}`
+        }
     }
 
     async getPosts() {
         try {
-            const response = await fetch(`${PUBLIC_URL}/${this.allPostUrl}`, {
+            const response = await fetch(`${PUBLIC_URL}/allposts`, {
                 method: 'get',
-                headers: {
-                    'Authorization': this.token
-                },
+                headers: this.header
             })
 
             const result = await response.json()
@@ -31,10 +31,7 @@ class HomeCrudClass {
         try {
             const response = await fetch(`${PUBLIC_URL}/like`, {
                 method: 'put',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': this.token
-                },
+                headers: this.header,
                 body: JSON.stringify({
                     postId: id
                 })
@@ -54,10 +51,7 @@ class HomeCrudClass {
         try {
             const response = await fetch(`${PUBLIC_URL}/unlike`, {
                 method: 'put',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': this.token
-                },
+                headers: this.header,
                 body: JSON.stringify({
                     postId: id
                 })
@@ -78,10 +72,7 @@ class HomeCrudClass {
         try {
             const response = await fetch(`${PUBLIC_URL}/comment`, {
                 method: 'put',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
+                headers: this.header,
                 body: JSON.stringify({postId, text})
             })
 
@@ -99,9 +90,7 @@ class HomeCrudClass {
     async removeComment(postId, commentId) {
         const response = await fetch(`${PUBLIC_URL}/deletecomment/${postId}/${commentId}`, {
             method: 'delete',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
+            headers: this.header,
         })
 
         const result = await response.json()
@@ -115,9 +104,7 @@ class HomeCrudClass {
         try {
             const response = await fetch(`${PUBLIC_URL}/deletepost/${postId}`, {
                 method: 'delete',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
+                headers: this.header,
             })
 
             const result = await response.json()
