@@ -96,6 +96,21 @@ class HomeCrudClass {
         }
     }
 
+    async removeComment(postId, commentId) {
+        const response = await fetch(`${PUBLIC_URL}/deletecomment/${postId}/${commentId}`, {
+            method: 'delete',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        })
+
+        const result = await response.json()
+
+        loglevel.debug(result)
+
+        return result
+    };
+
     async deletePost(postId) {
         try {
             const response = await fetch(`${PUBLIC_URL}/deletepost/${postId}`, {

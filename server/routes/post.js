@@ -7,7 +7,8 @@ import {
     likePostController,
     unLikePostController,
     commentPostController,
-    deletePostController
+    deletePostController,
+    deleteCommentController
 } from "../controllers/createPostController.js";
 
 const router = express.Router()
@@ -20,5 +21,6 @@ router
     .put('/unlike', requireLogin, unLikePostController)
     .put('/comment', requireLogin, commentPostController)
     .delete('/deletepost/:postId', requireLogin, deletePostController)
+    .delete('/deletecomment/:id/:comment_id', requireLogin, deleteCommentController)
 
 export default router

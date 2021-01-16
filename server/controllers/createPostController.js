@@ -92,3 +92,22 @@ export const deletePostController = async (req, res) => {
             }
         })
 }
+
+export const deleteCommentController = async (req, res) => {
+    const comment = {_id: req.params.comment_id};
+    Post.findByIdAndUpdate(
+        req.params.id,
+        {$pull: {comments: comment},},
+        {new: true,}
+    )
+        .populate("comments.postedBy", "_id name")
+        .populate("postedBy", "_id name ")
+        .exec((err, postComment) => {
+            if (err || !postComment) {
+                return res.status(422).json({error: err});
+            }
+            if (postComment.postedBy._id.toString() === req.user._id.toString()) {
+                res.json(postComment);
+            }
+        });
+}

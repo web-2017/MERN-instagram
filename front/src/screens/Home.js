@@ -52,13 +52,18 @@ const Home = () => {
         setData(replaceData(data, comment))
     }
 
-    // delete comments
+    // delete posts
     const deletePost = async (postId) => {
         const post = await CreateHomeCrud.deletePost(postId)
         const filterData = data.filter(item => {
             return item._id !== post._id
         })
         setData(filterData)
+    }
+    // delete comments
+    const removeCommentHandler = async (postId, commentId) => {
+        const comment = await CreateHomeCrud.removeComment(postId, commentId)
+        setData(replaceData(data, comment))
     }
 
     return (
@@ -73,6 +78,7 @@ const Home = () => {
                             likePostHandler={likePostHandler}
                             unLikePostHandler={unLikePostHandler}
                             makeComment={makeComment}
+                            removeCommentHandler={removeCommentHandler}
                         />
                     )
                 })

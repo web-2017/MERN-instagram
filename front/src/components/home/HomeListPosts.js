@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {CardContent, CardImage, HomeCard} from "../../assets/HomeStyle";
 import {UserContext} from "../../App";
 
-export default ({post, deletePost, likePostHandler, unLikePostHandler, makeComment}) => {
+export default ({post, deletePost, likePostHandler, unLikePostHandler, makeComment, removeCommentHandler}) => {
     const {state} = useContext(UserContext)
     return (
         <HomeCard className="card flex space-between">
@@ -42,20 +42,29 @@ export default ({post, deletePost, likePostHandler, unLikePostHandler, makeComme
                 {
                     post.comments.map(comment => {
                         return (
-                            <h6 key={comment._id}><span
-                                className='text-darken-1'>{comment.postedBy.name}</span> {comment.text}
+                            <h6 key={comment._id}>
+                                <span className='text-darken-1'><b>{comment.postedBy.name}</b></span>
+                                <span> {comment.text}</span>
+
+                                {(post.postedBy._id && comment.postedBy._id) ==
+                                state.id && (
+                                    <i className="material-icons"
+                                       title='remove'
+                                       onClick={() => removeCommentHandler(post._id, comment._id)}
+                                    >remove</i>
+                                )}
                             </h6>
                         )
                     })
-                }
-                <form onSubmit={event => {
+                    }
+                    <form onSubmit={event => {
                     event.preventDefault()
                     makeComment(event.target[0].value, post._id)
                     event.target[0].value = ''
                 }}>
                     <input type="text" placeholder='add comment and press Enter'/>
-                </form>
-            </CardContent>
-        </HomeCard>
-    )
-}
+                    </form>
+                    </CardContent>
+                    </HomeCard>
+                    )
+                }
