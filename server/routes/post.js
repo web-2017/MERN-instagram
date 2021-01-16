@@ -21,6 +21,6 @@ router
     .put('/unlike', requireLogin, unLikePostController)
     .put('/comment', requireLogin, commentPostController)
     .delete('/deletepost/:postId', requireLogin, deletePostController)
-    .delete('/deletecomment/:id/:comment_id', requireLogin, deleteCommentController)
+    .delete('/deletecomment/:id/:commentId', requireLogin, deleteCommentController)
 
 export default router
