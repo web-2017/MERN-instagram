@@ -10,7 +10,8 @@ export const allPostsController = async (req, res) => {
         const posts = await Post.find()
             .populate("postedBy", "_id name")
             .populate("comments.postedBy", "_id name")
-        res.json(posts)
+
+        await res.json(posts)
     } catch (e) {
         console.log(e)
     }
@@ -34,9 +35,9 @@ export const createPostController = async (req, res) => {
 
 export const myPosts = async (req, res) => {
     const posts = await Post.find({postedBy: req.user._id})
-        .populate('postedBy', "_id")
+        .populate('postedBy', "_id name")
         .populate('comments.postedBy', "_id name")
-    res.json(posts)
+    await res.json(posts)
 }
 
 export const likePostController = async (req, res) => {
@@ -68,9 +69,8 @@ export const commentPostController = async (req, res) => {
     }, {
         new: true
     })
-        .populate('comments.postedBy', '_id name')
-        .populate('postedBy', "_id")
-
+        .populate('postedBy', "_id name")
+        .populate('comments.postedBy', "_id name")
         .exec((err, result) => {
             if (err) return res.status(422).json({error: err})
             else return res.status(200).json(result)
@@ -79,7 +79,7 @@ export const commentPostController = async (req, res) => {
 
 export const deletePostController = async (req, res) => {
     Post.findOne({_id: req.params.postId})
-        .populate("postedBy", "_id")
+        .populate("postedBy", "_id name")
         .exec((err, post) => {
             if (err || !post) return res.status(422).json({error: err})
             if (post.postedBy._id.toString() === req.user._id.toString()) {
@@ -105,6 +105,8 @@ export const deleteCommentController = async (req, res) => {
         .populate("comments.postedBy", "_id name")
         .populate("postedBy", "_id name ")
         .exec((err, postComment) => {
+            console.log('postComment', postComment)
+            console.log('req.user._id', req.user._id)
             if (err || !postComment) return res.status(422).json({error: err});
 
             if (postComment.postedBy._id.toString() === req.user._id.toString()) {

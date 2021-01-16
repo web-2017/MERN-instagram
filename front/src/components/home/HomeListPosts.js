@@ -47,7 +47,7 @@ export default ({post, deletePost, likePostHandler, unLikePostHandler, makeComme
                                 <span> {comment.text}</span>
 
                                 {
-                                    (post.postedBy._id && comment.postedBy._id) === state.id
+                                    (comment.postedBy._id) === state.id
                                     &&
                                     (
                                         <i className="material-icons"
