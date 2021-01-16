@@ -8,6 +8,7 @@ import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import auth from "./routes/auth.js";
 import post from "./routes/post.js";
+import user from "./routes/user.js";
 import {PORT, MONGO_URI} from './keys.js'
 
 // app.use(express.json())
@@ -19,6 +20,7 @@ const port = PORT || 5000
 
 app.use(auth)
 app.use(post)
+app.use(user)
 
 // Connection to Mongodb
 try {
