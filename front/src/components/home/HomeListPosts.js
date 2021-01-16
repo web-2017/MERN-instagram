@@ -53,7 +53,6 @@ export default ({post, deletePost, likePostHandler, unLikePostHandler, makeComme
                     makeComment(event.target[0].value, post._id)
                     event.target[0].value = ''
                 }}>
-
                     <input type="text" placeholder='add comment and press Enter'/>
                 </form>
             </CardContent>

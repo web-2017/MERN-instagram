@@ -1,16 +1,12 @@
 import React, {useState, useEffect,} from "react";
 
+import {HomeContainer} from "../assets/HomeStyle";
+
 import HomeCrudClass from '../components/home/HomeCrudClass'
-
-import {HomeContainer, HomeCard, CardImage, CardContent} from "../assets/HomeStyle";
-
-
 import HomeListPosts from "../components/home/HomeListPosts";
 
 const Home = () => {
     const CreateHomeCrud = new HomeCrudClass(`Bearer ${localStorage.getItem('token')}`)
-
-
     const [data, setData] = useState([])
 
     useEffect(() => {
@@ -59,11 +55,9 @@ const Home = () => {
     // delete comments
     const deletePost = async (postId) => {
         const post = await CreateHomeCrud.deletePost(postId)
-
         const filterData = data.filter(item => {
-            return item._id != post._id
+            return item._id !== post._id
         })
-
         setData(filterData)
     }
 
@@ -75,7 +69,7 @@ const Home = () => {
                         <HomeListPosts
                             key={post._id}
                             post={post}
-                            eletePost={deletePost}
+                            deletePost={deletePost}
                             likePostHandler={likePostHandler}
                             unLikePostHandler={unLikePostHandler}
                             makeComment={makeComment}
