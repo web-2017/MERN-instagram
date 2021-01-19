@@ -12,7 +12,7 @@ const HomeListPosts = ({
 	removeCommentHandler,
 }) => {
 	const { state } = useContext(UserContext);
-	const { _id: postedId, name: postedName } = post.postedBy;
+	const { _id: postedId, name: postedByName } = post.postedBy;
 	const { _id: id } = post;
 
 	const checkIsCurrentUserHandler = () => {
@@ -24,7 +24,7 @@ const HomeListPosts = ({
 	return (
 		<HomeCard className='card flex space-between'>
 			<h5>
-				<Link to={checkIsCurrentUserHandler}> {postedName}</Link>
+				<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
 			</h5>
 			<div className='col flow-text'>
 				{postedId === state.id && (
@@ -41,6 +41,7 @@ const HomeListPosts = ({
 			</CardImage>
 			<CardContent>
 				<i className='small material-icons red-text'>favorite</i>
+
 				{post.likes.includes(state.id) ? (
 					<i className='material-icons' onClick={() => unLikePostHandler(id)}>
 						thumb_down
@@ -50,6 +51,7 @@ const HomeListPosts = ({
 						thumb_up
 					</i>
 				)}
+
 				<h6>{post.likes.length} likes</h6>
 				<h6>{post.title}</h6>
 				<p>{post.body}</p>
@@ -74,6 +76,7 @@ const HomeListPosts = ({
 						</h6>
 					);
 				})}
+
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();

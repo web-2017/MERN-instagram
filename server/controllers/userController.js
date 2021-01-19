@@ -37,3 +37,68 @@ export const userAvatarController = async (req, res) => {
 		console.log(e);
 	}
 };
+
+export const followUserController = async (req, res) => {
+	const { followId } = req.body;
+	User.findByIdAndUpdate(
+		followId,
+		{
+			$push: { followers: req.user._id },
+		},
+		{
+			new: true,
+		},
+		(err, result) => {
+			if (err) {
+				return res.status(422).json({ error: err });
+			}
+
+			User.findByIdAndUpdate(
+				req.user._id,
+				{
+					$push: { following: followId },
+				},
+				{
+					new: true,
+				}
+			)
+				.then((res) => {
+					res.status(200).json(res);
+				})
+				.catch((err) => {
+					return res.status(422).json({ error: err });
+				});
+		}
+	);
+};
+
+export const unFollowUserController = async (req, res) => {
+	const { unFollowId } = req.body;
+	User.findByIdAndUpdate(
+		unFollowId,
+		{
+			$pull: { followers: req.user._id },
+		},
+		{ new: true },
+		(err, result) => {
+			if (err) {
+				return res.status(422).json({ error: err });
+			}
+
+			User.findByIdAndUpdate(
+				req.user._id,
+				{
+					$pull: { following: unFollowId },
+				},
+				{ new: true }
+			)
+
+				.then((res) => {
+					res.status(200).json(res);
+				})
+				.catch((err) => {
+					return res.status(422).json({ error: err });
+				});
+		}
+	);
+};
