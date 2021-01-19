@@ -48,25 +48,27 @@ export const likePostController = async (req, res) => {
 		req.body.postId,
 		{ $push: { likes: req.user._id } },
 		{ new: true }
-	).exec((err, result) => {
-		if (err) return res.status(422).json({ error: err });
-		else return res.json(result);
-	});
+	)
+		.populate('postedBy', '_id name')
+		.populate('comments.postedBy', '_id name')
+		.exec((err, result) => {
+			if (err) return res.status(422).json({ error: err });
+			else return res.json(result);
+		});
 };
 
 export const unLikePostController = async (req, res) => {
 	Post.findByIdAndUpdate(
 		req.body.postId,
-		{
-			$pull: { likes: req.user._id },
-		},
-		{
-			new: true,
-		}
-	).exec((err, result) => {
-		if (err) return res.status(422).json({ error: err });
-		else return res.json(result);
-	});
+		{ $pull: { likes: req.user._id } },
+		{ new: true }
+	)
+		.populate('postedBy', '_id name')
+		.populate('comments.postedBy', '_id name')
+		.exec((err, result) => {
+			if (err) return res.status(422).json({ error: err });
+			else return res.json(result);
+		});
 };
 
 export const commentPostController = async (req, res) => {

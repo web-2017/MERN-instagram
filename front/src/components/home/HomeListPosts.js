@@ -12,21 +12,24 @@ const HomeListPosts = ({
 	removeCommentHandler,
 }) => {
 	const { state } = useContext(UserContext);
-	const { _id } = post.postedBy;
+	const { _id: postedId, name: postedName } = post.postedBy;
+	const { _id: id } = post;
 
 	const checkIsCurrentUserHandler = () => {
-		return post.postedBy._id !== state.id ? `/profile/${_id}` : `/profile/`;
+		return post.postedBy._id !== state.id
+			? `/profile/${postedId}`
+			: `/profile/`;
 	};
 
 	return (
 		<HomeCard className='card flex space-between'>
 			<h5>
-				<Link to={checkIsCurrentUserHandler}> {post.postedBy.name}</Link>
+				<Link to={checkIsCurrentUserHandler}> {postedName}</Link>
 			</h5>
 			<div className='col flow-text'>
-				{post.postedBy._id === state.id && (
+				{postedId === state.id && (
 					<span>
-						<i className='material-icons' onClick={() => deletePost(post._id)}>
+						<i className='material-icons' onClick={() => deletePost(id)}>
 							delete
 						</i>
 					</span>
@@ -39,24 +42,19 @@ const HomeListPosts = ({
 			<CardContent>
 				<i className='small material-icons red-text'>favorite</i>
 				{post.likes.includes(state.id) ? (
-					<i
-						className='material-icons'
-						onClick={() => unLikePostHandler(post._id)}
-					>
+					<i className='material-icons' onClick={() => unLikePostHandler(id)}>
 						thumb_down
 					</i>
 				) : (
-					<i
-						className='material-icons'
-						onClick={() => likePostHandler(post._id)}
-					>
+					<i className='material-icons' onClick={() => likePostHandler(id)}>
 						thumb_up
 					</i>
 				)}
 				<h6>{post.likes.length} likes</h6>
 				<h6>{post.title}</h6>
 				<p>{post.body}</p>
-				{post.comments.map((comment) => {
+
+				{post?.comments.map((comment) => {
 					return (
 						<h6 key={comment._id}>
 							<span className='text-darken-1'>
@@ -68,7 +66,7 @@ const HomeListPosts = ({
 								<i
 									className='material-icons'
 									title='remove'
-									onClick={() => removeCommentHandler(post._id, comment._id)}
+									onClick={() => removeCommentHandler(id, comment._id)}
 								>
 									remove
 								</i>
@@ -79,7 +77,7 @@ const HomeListPosts = ({
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						makeComment(event.target[0].value, post._id);
+						makeComment(event.target[0].value, id);
 						event.target[0].value = '';
 					}}
 				>
