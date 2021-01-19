@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../App';
-import { CLOUDINARY_URL, PUBLIC_URL } from '../config/KEYS';
+import { CLOUDINARY_URL, PUBLIC_URL, HEADERS_OPTIONS } from '../config/KEYS';
 import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData';
 import loglevel from '../middleware/loglevel';
 
@@ -15,10 +15,6 @@ import {
 } from '../assets/ProfileStyles';
 
 const Profile = () => {
-	const [headers] = useState({
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${localStorage.getItem('token')}`,
-	});
 	const [posts, setPosts] = useState([]);
 	const [file, setFile] = useState(null);
 	const { state, dispatch } = useContext(UserContext);
@@ -37,9 +33,7 @@ const Profile = () => {
 		try {
 			const response = await fetch(`${PUBLIC_URL}/mypost`, {
 				method: 'get',
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
+				headers: HEADERS_OPTIONS,
 			});
 
 			const result = await response.json();
@@ -63,7 +57,7 @@ const Profile = () => {
 			.then((data) => {
 				fetch('/updateavatar', {
 					method: 'put',
-					headers: headers,
+					headers: HEADERS_OPTIONS,
 					body: JSON.stringify({
 						avatar: data.url,
 					}),

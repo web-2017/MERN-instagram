@@ -8,13 +8,15 @@ export const userController = async (req, res) => {
 			Post.find({ postedBy: req.params.id })
 				.populate('postedBy', '_id name')
 				.exec((err, posts) => {
-					if (err) return res.status(422).json({ error: err });
-					res.status(200).json({ user, posts });
+					if (err) {
+						return res.status(422).json({ error: err });
+					}
+					res.json({ user, posts });
 				});
 		})
-		.catch((error) =>
-			res.status(404).json({ error: 'User not found ' + error })
-		);
+		.catch((err) => {
+			return res.status(404).json({ error: 'User not found' });
+		});
 };
 
 // set profile avatar picture
