@@ -1,72 +1,129 @@
-import React, {useEffect, useState, useContext} from "react";
-import {UserContext} from "../App";
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../App';
+import { CLOUDINARY_URL, PUBLIC_URL } from '../config/KEYS';
+import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData';
+import loglevel from '../middleware/loglevel';
 
 // styles
 import {
-    ImageAvatar,
-    ProfileContainer,
-    ProfileHeader,
-    ProfileFollowerContainer,
-    GalleryContainer,
-    GalleryItem
-} from "../assets/ProfileStyles";
-import {PUBLIC_URL} from "../config/KEYS";
-import loglevel from "../middleware/loglevel";
+	ImageAvatar,
+	ProfileContainer,
+	ProfileHeader,
+	ProfileFollowerContainer,
+	GalleryContainer,
+	GalleryItem,
+} from '../assets/ProfileStyles';
 
-export default () => {
-    const [posts, setPosts] = useState([])
-    const {state} = useContext(UserContext)
+const Profile = () => {
+	const [headers] = useState({
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${localStorage.getItem('token')}`,
+	});
+	const [posts, setPosts] = useState([]);
+	const [file, setFile] = useState(null);
+	const { state, dispatch } = useContext(UserContext);
 
-    const fakeImage = 'https://images.unsplash.com/photo-1489875347897-49f64b51c1f8?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+	useEffect(() => {
+		getMyPost();
+	}, []);
 
+	useEffect(() => {
+		if (file) {
+			createImageHandler();
+		}
+	}, [file]);
 
-    useEffect(() => {
-        getMyPost()
-    }, [])
+	const getMyPost = async () => {
+		try {
+			const response = await fetch(`${PUBLIC_URL}/mypost`, {
+				method: 'get',
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
 
-    const getMyPost = async () => {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/mypost`, {
-                method: 'get',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-            })
+			const result = await response.json();
 
-            const result = await response.json()
+			setPosts(result);
 
-            setPosts(result)
+			loglevel.debug(result);
+		} catch (e) {
+			loglevel.error(e);
+		}
+	};
 
-            loglevel.debug(result)
+	const createImageHandler = async () => {
+		const data = await CloundaryImagePostData(file);
 
-        } catch (e) {
-            loglevel.error(e)
-        }
-    }
+		await fetch(CLOUDINARY_URL, {
+			method: 'put',
+			body: data,
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				fetch('/updateavatar', {
+					method: 'put',
+					headers: headers,
+					body: JSON.stringify({
+						avatar: data.url,
+					}),
+				})
+					.then((res) => res.json())
+					.then((result) => {
+						console.log(result);
+						localStorage.setItem(
+							'user',
+							JSON.stringify({ ...state, avatar: result.avatar })
+						);
+						dispatch({ type: 'AVATAR', payload: result.avatar });
+					});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
-    return (
-        <ProfileContainer>
-            <ProfileHeader>
-                <div>
-                    <div>
-                        <ImageAvatar src={fakeImage} alt=""/>
-                    </div>
-                </div>
+	const updatePhoto = (file) => {
+		setFile(file);
+	};
 
-                <div>
-                    <h4>{state && state.name}</h4>
-                    <ProfileFollowerContainer>
-                        <h6>40 posts</h6>
-                        <h6>40 followers</h6>
-                        <h6>40 following</h6>
-                    </ProfileFollowerContainer>
-                </div>
-            </ProfileHeader>
-            <GalleryContainer>
-                {posts.map(post => (
-                    <GalleryItem key={post._id} src={post.image} alt={post.title}/>
-                ))}
-            </GalleryContainer>
-        </ProfileContainer>
-    )
-}
+	return (
+		<ProfileContainer>
+			<ProfileHeader>
+				<div>
+					<div>
+						<ImageAvatar src={state?.avatar} alt={state?.name} />
+					</div>
+				</div>
+
+				<div>
+					<h4>{state && state.name}</h4>
+					<ProfileFollowerContainer>
+						<h6>40 posts</h6>
+						<h6>40 followers</h6>
+						<h6>40 following</h6>
+					</ProfileFollowerContainer>
+				</div>
+				<div className='file-field input-field' style={{ margin: '10px' }}>
+					<div className='btn #64b5f6 blue darken-1'>
+						<span>Update Avatar</span>
+						<input
+							type='file'
+							onChange={(e) => updatePhoto(e.target.files[0])}
+						/>
+					</div>
+					<div className='file-path-wrapper'>
+						<input className='file-path validate' type='text' />
+					</div>
+				</div>
+			</ProfileHeader>
+			<GalleryContainer>
+				{posts.map((post) => (
+					<GalleryItem key={post._id} src={post.image} alt={post.title} />
+				))}
+			</GalleryContainer>
+		</ProfileContainer>
+	);
+};
+
+export default Profile;
