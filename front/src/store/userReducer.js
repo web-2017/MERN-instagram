@@ -1,15 +1,21 @@
 export const initialState = null;
 
-export const reducer = (state, action) => {
-	switch (action.type) {
+export const reducer = (state, { payload, type }) => {
+	switch (type) {
 		case 'USER':
-			return action.payload;
+			return payload;
 		case 'CLEAR':
 			return null;
 		case 'AVATAR':
 			return {
 				...state,
-				avatar: action.payload,
+				avatar: payload,
+			};
+		case 'UPDATE':
+			return {
+				...state,
+				followers: payload.followers,
+				following: payload.following,
 			};
 		default:
 			return state;

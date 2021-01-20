@@ -39,9 +39,8 @@ export const userAvatarController = async (req, res) => {
 };
 
 export const followUserController = async (req, res) => {
-	const { followId } = req.body;
 	User.findByIdAndUpdate(
-		followId,
+		req.body.followId,
 		{
 			$push: { followers: req.user._id },
 		},
@@ -52,18 +51,16 @@ export const followUserController = async (req, res) => {
 			if (err) {
 				return res.status(422).json({ error: err });
 			}
-
 			User.findByIdAndUpdate(
 				req.user._id,
 				{
-					$push: { following: followId },
+					$push: { following: req.body.followId },
 				},
-				{
-					new: true,
-				}
+				{ new: true }
 			)
-				.then((res) => {
-					res.status(200).json(res);
+				.select('-password')
+				.then((result) => {
+					res.json(result);
 				})
 				.catch((err) => {
 					return res.status(422).json({ error: err });
@@ -92,7 +89,7 @@ export const unFollowUserController = async (req, res) => {
 				},
 				{ new: true }
 			)
-
+				.select('-password')
 				.then((res) => {
 					res.status(200).json(res);
 				})

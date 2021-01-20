@@ -74,7 +74,7 @@ export default () => {
 				<button
 					className='btn waves-effect waves-light blue darken-2'
 					type='submit'
-					onClick={SignInPostData}
+					onClick={() => SignInPostData()}
 				>
 					Login
 				</button>

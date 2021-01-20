@@ -15,9 +15,9 @@ import {
 } from '../assets/ProfileStyles';
 
 const UserProfile = () => {
-	const { userId } = useParams();
 	const [userProfile, setProfile] = useState(null);
-	const { state } = useContext(UserContext);
+	const { userId } = useParams();
+	const { state, dispatch } = useContext(UserContext);
 
 	useEffect(() => {
 		getMyPost();
@@ -40,6 +40,35 @@ const UserProfile = () => {
 		}
 	};
 
+	const followUserHandler = async () => {
+		try {
+			const response = await fetch(`/follow`, {
+				method: 'put',
+				headers: HEADERS_OPTIONS,
+				body: JSON.stringify({
+					followId: userId,
+				}),
+			});
+
+			const result = await response.json();
+			const { following, followers } = result;
+			dispatch({
+				type: 'UPDATE',
+				payload: { following, followers },
+			});
+			localStorage.setItem('user', JSON.stringify(result));
+			setProfile((prevState) => {
+				return {
+					...prevState,
+					user: result,
+				};
+			});
+			loglevel.debug(result);
+		} catch (e) {
+			loglevel.error(e);
+		}
+	};
+
 	return (
 		<ProfileContainer>
 			<ProfileHeader>
@@ -53,9 +82,17 @@ const UserProfile = () => {
 					<h4>{userProfile?.user?.name}</h4>
 					<h4>{userProfile?.user?.email}</h4>
 					<ProfileFollowerContainer>
-						<h6>{userProfile?.posts.length} posts</h6>
-						<h6>40 followers</h6>
-						<h6>40 following</h6>
+						<h6>{userProfile?.posts?.length} posts </h6>
+
+						<h6>{userProfile?.user?.followers.length} followers </h6>
+						<h6>{userProfile?.user?.following.length} following </h6>
+						<button
+							className='btn waves-effect waves-light blue darken-2'
+							type='submit'
+							onClick={() => followUserHandler()}
+						>
+							Follow
+						</button>
 					</ProfileFollowerContainer>
 				</div>
 			</ProfileHeader>
