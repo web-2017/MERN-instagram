@@ -70,28 +70,28 @@ export const followUserController = async (req, res) => {
 };
 
 export const unFollowUserController = async (req, res) => {
-	const { unFollowId } = req.body;
 	User.findByIdAndUpdate(
-		unFollowId,
+		req.body.unFollowId,
 		{
 			$pull: { followers: req.user._id },
 		},
-		{ new: true },
+		{
+			new: true,
+		},
 		(err, result) => {
 			if (err) {
 				return res.status(422).json({ error: err });
 			}
-
 			User.findByIdAndUpdate(
 				req.user._id,
 				{
-					$pull: { following: unFollowId },
+					$pull: { following: req.body.unFollowId },
 				},
 				{ new: true }
 			)
 				.select('-password')
-				.then((res) => {
-					res.status(200).json(res);
+				.then((result) => {
+					res.json(result);
 				})
 				.catch((err) => {
 					return res.status(422).json({ error: err });

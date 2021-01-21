@@ -16,6 +16,7 @@ import {
 
 const UserProfile = () => {
 	const [userProfile, setProfile] = useState(null);
+	const [showFollow, setShowFollow] = useState(true);
 	const { userId } = useParams();
 	const { state, dispatch } = useContext(UserContext);
 
@@ -60,9 +61,60 @@ const UserProfile = () => {
 			setProfile((prevState) => {
 				return {
 					...prevState,
-					user: result,
+					user: {
+						...prevState.user,
+						followers: [...prevState.user.followers, result._id],
+					},
 				};
 			});
+
+			setShowFollow(false);
+
+			loglevel.debug(result);
+		} catch (e) {
+			loglevel.error(e);
+		}
+	};
+
+	const unFollowUserHandler = async () => {
+		try {
+			const response = await fetch(`/unfollow`, {
+				method: 'put',
+				headers: HEADERS_OPTIONS,
+				body: JSON.stringify({
+					unFollowId: userId,
+				}),
+			});
+
+			const result = await response.json();
+
+			const { following, followers } = result;
+			console.log(111, result);
+
+			dispatch({
+				type: 'UPDATE',
+				payload: { following, followers },
+			});
+
+			localStorage.setItem('user', JSON.stringify(result));
+
+			setProfile((prevState) => {
+				const newFollower = prevState.user.followers.filter((id) => {
+					console.log(id);
+					console.log(result._id);
+					return id !== result._id;
+				});
+
+				return {
+					...prevState,
+					user: {
+						...prevState.user,
+						followers: newFollower,
+					},
+				};
+			});
+
+			setShowFollow(true);
 			loglevel.debug(result);
 		} catch (e) {
 			loglevel.error(e);
@@ -86,13 +138,23 @@ const UserProfile = () => {
 
 						<h6>{userProfile?.user?.followers.length} followers </h6>
 						<h6>{userProfile?.user?.following.length} following </h6>
-						<button
-							className='btn waves-effect waves-light blue darken-2'
-							type='submit'
-							onClick={() => followUserHandler()}
-						>
-							Follow
-						</button>
+						{showFollow ? (
+							<button
+								className='btn waves-effect waves-light blue darken-2'
+								type='submit'
+								onClick={() => followUserHandler()}
+							>
+								Follow
+							</button>
+						) : (
+							<button
+								className='btn waves-effect waves-light blue darken-2'
+								type='submit'
+								onClick={() => unFollowUserHandler()}
+							>
+								unfollow
+							</button>
+						)}
 					</ProfileFollowerContainer>
 				</div>
 			</ProfileHeader>
