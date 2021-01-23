@@ -24,7 +24,7 @@ export const subscribePostsController = async (req, res) => {
 			.populate('postedBy', '_id name')
 			.populate('comments.postedBy', '_id name');
 
-		await res.json(posts);
+		res.json(posts);
 	} catch (e) {
 		console.log(e);
 	}

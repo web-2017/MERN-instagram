@@ -1,8 +1,9 @@
-import { PUBLIC_URL } from '../../config/KEYS';
-import loglevel from '../../middleware/loglevel';
-import API from '../../constants/API';
+import { PUBLIC_URL } from '../config/KEYS';
+import loglevel from '../middleware/loglevel';
 
-class HomeCrudClass {
+import API from '../constants/API';
+
+class SubscribeUserPostClass {
 	constructor(token) {
 		this.header = {
 			'Content-type': 'application/json',
@@ -11,23 +12,6 @@ class HomeCrudClass {
 	}
 
 	async getPosts() {
-		try {
-			const response = await fetch(`${PUBLIC_URL}/${API.posts}`, {
-				method: 'get',
-				headers: this.header,
-			});
-
-			const result = await response.json();
-
-			loglevel.debug(result);
-
-			return result;
-		} catch (e) {
-			loglevel.error(e);
-		}
-	}
-
-	async getSubscribePostData() {
 		try {
 			const response = await fetch(`${PUBLIC_URL}/${API.subscribepost}`, {
 				headers: this.header,
@@ -45,7 +29,7 @@ class HomeCrudClass {
 
 	async likePostHandler(id) {
 		try {
-			const response = await fetch(`${PUBLIC_URL}/${API.like}`, {
+			const response = await fetch(`${PUBLIC_URL}/like`, {
 				method: 'put',
 				headers: this.header,
 				body: JSON.stringify({
@@ -64,7 +48,7 @@ class HomeCrudClass {
 
 	async unLikePostHandler(id) {
 		try {
-			const response = await fetch(`${PUBLIC_URL}/${API.unlike}`, {
+			const response = await fetch(`${PUBLIC_URL}/unlike`, {
 				method: 'put',
 				headers: this.header,
 				body: JSON.stringify({
@@ -84,7 +68,7 @@ class HomeCrudClass {
 
 	async makeComment(text, postId) {
 		try {
-			const response = await fetch(`${PUBLIC_URL}/${API.comment}`, {
+			const response = await fetch(`${PUBLIC_URL}/comment`, {
 				method: 'put',
 				headers: this.header,
 				body: JSON.stringify({ postId, text }),
@@ -118,7 +102,7 @@ class HomeCrudClass {
 
 	async deletePost(postId) {
 		try {
-			const response = await fetch(`${PUBLIC_URL}/${API.deletes}/${postId}`, {
+			const response = await fetch(`${PUBLIC_URL}/deletepost/${postId}`, {
 				method: 'delete',
 				headers: this.header,
 			});
@@ -134,4 +118,4 @@ class HomeCrudClass {
 	}
 }
 
-export default HomeCrudClass;
+export default SubscribeUserPostClass;

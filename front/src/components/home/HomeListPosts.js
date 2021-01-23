@@ -1,6 +1,12 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { CardContent, CardImage, HomeCard } from '../../assets/HomeStyle';
+import {
+	CardContent,
+	CardImage,
+	HomeCard,
+	HomeCardTitle,
+} from '../../assets/HomeStyle';
 import { UserContext } from '../../App';
 
 const HomeListPosts = ({
@@ -23,18 +29,20 @@ const HomeListPosts = ({
 
 	return (
 		<HomeCard className='card flex space-between'>
-			<h5>
-				<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
-			</h5>
-			<div className='col flow-text'>
-				{postedId === state.id && (
-					<span>
-						<i className='material-icons' onClick={() => deletePost(id)}>
-							delete
-						</i>
-					</span>
-				)}
-			</div>
+			<HomeCardTitle>
+				<h5 style={{ margin: 0 }}>
+					<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
+				</h5>
+				<div className='col flow-text'>
+					{postedId === state.id && (
+						<span>
+							<i className='material-icons' onClick={() => deletePost(id)}>
+								delete
+							</i>
+						</span>
+					)}
+				</div>
+			</HomeCardTitle>
 			<CardImage className='card-image'>
 				<img style={{ width: '100%' }} src={post.image} alt='' />
 				<span className='card-title'>Card Title</span>
@@ -89,6 +97,10 @@ const HomeListPosts = ({
 			</CardContent>
 		</HomeCard>
 	);
+};
+
+HomeListPosts.propTypes = {
+	post: PropTypes.object,
 };
 
 export default HomeListPosts;

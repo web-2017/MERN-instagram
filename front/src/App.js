@@ -6,6 +6,8 @@ import {
 	useHistory,
 } from 'react-router-dom';
 
+import './App.css';
+
 import { Navbar } from './components/Navbar';
 import Container from './components/Container';
 
@@ -15,6 +17,9 @@ import Signup from './screens/Signup';
 import Profile from './screens/Profile';
 import UserProfile from './screens/UserProfile';
 import CreatePost from './screens/CreatePost';
+import SubscribesUserPost from './screens/SubscribesUserPost';
+
+import routesApi from './constants/routesApi';
 
 import { reducer, initialState } from './store/userReducer';
 
@@ -29,7 +34,7 @@ const Routing = () => {
 		if (user) {
 			dispatch({ type: 'USER', payload: user });
 		} else {
-			history.push('/signin');
+			history.push(`/${routesApi.login}`);
 		}
 	}, []);
 
@@ -53,6 +58,9 @@ const Routing = () => {
 				</Route>
 				<Route path='/profile/:userId'>
 					<UserProfile />
+				</Route>
+				<Route path='/myfollowingpost'>
+					<SubscribesUserPost />
 				</Route>
 			</Container>
 		</Switch>
