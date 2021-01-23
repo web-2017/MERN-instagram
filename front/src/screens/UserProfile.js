@@ -88,20 +88,15 @@ const UserProfile = () => {
 
 			const result = await response.json();
 
-			const { following, followers } = result;
-			console.log(111, result);
-
 			dispatch({
 				type: 'UPDATE',
-				payload: { following, followers },
+				payload: { following: result.following, followers: result.followers },
 			});
 
 			localStorage.setItem('user', JSON.stringify(result));
 
 			setProfile((prevState) => {
 				const newFollower = prevState.user.followers.filter((id) => {
-					console.log(id);
-					console.log(result._id);
 					return id !== result._id;
 				});
 

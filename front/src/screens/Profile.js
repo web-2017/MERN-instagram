@@ -93,9 +93,9 @@ const Profile = () => {
 				<div>
 					<h4>{state && state.name}</h4>
 					<ProfileFollowerContainer>
-						<h6>40 posts</h6>
-						<h6>40 followers</h6>
-						<h6>40 following</h6>
+						<h6>{posts?.length} posts</h6>
+						<h6>{state?.followers?.length} followers</h6>
+						<h6>{state?.following?.length} following</h6>
 					</ProfileFollowerContainer>
 				</div>
 				<div className='file-field input-field' style={{ margin: '10px' }}>

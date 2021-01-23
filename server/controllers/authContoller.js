@@ -66,12 +66,12 @@ export const signInUser = async (req, res) => {
 		const token = jwt.sign({ id: user._id }, JWT_TOKEN);
 
 		if (hashPassword) {
-			const { name, email, _id, avatar } = user;
+			const { name, email, _id, avatar, followers, following } = user;
 			return res.status(200).json({
 				message: `Добро пожаловать ${name || email}`,
 				token,
 				id: _id,
-				user: { id: _id, name, email, avatar },
+				user: { id: _id, name, email, avatar, followers, following },
 			});
 		} else {
 			return res.status(422).json({ error: `Неправильный пароль` });
