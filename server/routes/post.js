@@ -9,12 +9,14 @@ import {
 	commentPostController,
 	deletePostController,
 	deleteCommentController,
+	subscribePostsController,
 } from '../controllers/createPostController.js';
 
 const router = express.Router();
 
 router
 	.get('/allposts', requireLogin, allPostsController)
+	.get('/subscribepost', requireLogin, subscribePostsController)
 	.post('/createpost', requireLogin, createPostController)
 	.get('/mypost', requireLogin, myPosts)
 	.put('/like', requireLogin, likePostController)

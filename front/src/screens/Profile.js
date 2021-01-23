@@ -91,7 +91,8 @@ const Profile = () => {
 				</div>
 
 				<div>
-					<h4>{state && state.name}</h4>
+					<h4>{state?.name}</h4>
+					<h5>{state?.email}</h5>
 					<ProfileFollowerContainer>
 						<h6>{posts?.length} posts</h6>
 						<h6>{state?.followers?.length} followers</h6>

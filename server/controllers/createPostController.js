@@ -17,6 +17,19 @@ export const allPostsController = async (req, res) => {
 	}
 };
 
+export const subscribePostsController = async (req, res) => {
+	try {
+		// if postedBy in following
+		const posts = await Post.find({ postedBy: { $in: req.user.following } })
+			.populate('postedBy', '_id name')
+			.populate('comments.postedBy', '_id name');
+
+		await res.json(posts);
+	} catch (e) {
+		console.log(e);
+	}
+};
+
 export const createPostController = async (req, res) => {
 	const { title, body, image } = req.body;
 	if (!title || !body || !image)
