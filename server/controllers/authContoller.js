@@ -1,84 +1,73 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import User from '../models/user.js';
-import { JWT_TOKEN } from '../keys.js';
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import User from '../models/user.js'
+import { JWT_TOKEN } from '../keys.js'
 
 export const protectedVerification = (req, res) => {
-	res.json('router protected');
-};
+	res.json('router protected')
+}
 
-export const signUpUser = async (req, res) => {
-	const { name, email, password, image } = await req.body;
+export const signUp = async (req, res) => {
+	const { name, email, password, pic } = await req.body
 
-	if (!name) return res.status(422).json({ error: 'Пожалуйста, введите имя' });
-	if (!email)
-		return res.status(422).json({ error: 'Пожалуйста, введите email' });
-	if (!password)
-		return res.status(422).json({ error: 'Пожалуйста, введите пароль' });
+	if (!name) return res.status(422).json({ error: 'Пожалуйста, введите имя' })
+	if (!email) return res.status(422).json({ error: 'Пожалуйста, введите email' })
+	if (!password) return res.status(422).json({ error: 'Пожалуйста, введите пароль' })
 
 	// Если name не заполнили, то name = email
 	// if (email && password && !name) name = email
 
 	try {
 		// Если email уже сушествует, ошибка
-		const checkUser = await User.findOne({ email: email });
-		if (checkUser)
-			return res
-				.status(422)
-				.json({ error: `Такой email: ${email} - уже существует` });
+		const checkUser = await User.findOne({ email: email })
+		if (checkUser) return res.status(422).json({ error: `Такой email: ${email} - уже существует` })
 
 		// bcrypt password
-		const hashPassword = await bcrypt.hash(req.body.password, 12);
+		const hashPassword = await bcrypt.hash(req.body.password, 12)
 
 		// Создали нового пользователя
 		const user = new User({
 			name,
 			email,
 			password: hashPassword, // Зашифровали password
-			image: image,
-		});
+			pic,
+		})
 
-		await user.save();
+		await user.save()
 
-		res.status(200).json({ message: 'Success' });
-		console.log(`Пользователь ${req.body.email} создан`);
+		res.status(200).json({ message: 'Success' })
+		console.log(`Пользователь ${req.body.email} создан`)
 	} catch (e) {
-		console.log(e);
+		console.log(e)
 	}
-};
+}
 
-export const signInUser = async (req, res) => {
-	const { email, password } = req.body;
+export const signIn = async (req, res) => {
+	const { email, password } = req.body
 
-	if (!email || !password)
-		return res
-			.status(422)
-			.json({ error: 'Пожалуйста, введите email или password' });
+	if (!email || !password) return res.status(422).json({ error: 'Пожалуйста, введите email или password' })
 
-	const user = await User.findOne({ email: email });
+	const user = await User.findOne({ email: email })
 
-	if (!user)
-		return res
-			.status(422)
-			.json({ error: `Пользователя с таким email: ${email} не существует` });
+	if (!user) return res.status(422).json({ error: `Пользователя с таким email: ${email} не существует` })
 	try {
 		// сравниваем пароль при логине
-		const hashPassword = await bcrypt.compare(password, user.password);
+		const hashPassword = await bcrypt.compare(password, user.password)
 		// создали token
-		const token = jwt.sign({ id: user._id }, JWT_TOKEN);
+		const token = jwt.sign({ id: user._id }, JWT_TOKEN)
 
 		if (hashPassword) {
-			const { name, email, _id, avatar, followers, following, image } = user;
+			const { name, email, _id, avatar, followers, following, pic } = user
 			return res.status(200).json({
 				message: `Добро пожаловать ${name || email}`,
 				token,
 				id: _id,
-				user: { id: _id, name, email, avatar, followers, following, image },
-			});
+				user: { id: _id, name, pic, email, avatar, followers, following },
+			})
 		} else {
-			return res.status(422).json({ error: `Неправильный пароль` });
+			return res.status(422).json({ error: `Неправильный пароль` })
 		}
 	} catch (e) {
-		console.log(e);
+		console.log(e)
 	}
-};
+}

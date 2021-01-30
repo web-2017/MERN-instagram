@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-const { ObjectId } = mongoose.Schema.Types;
+import mongoose from 'mongoose'
+const { ObjectId } = mongoose.Schema.Types
 
 const userSchema = new mongoose.Schema({
 	name: {
@@ -14,15 +14,14 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	image: {
+	pic: {
 		type: String,
-		default:
-			'https://res.cloudinary.com/mario0284/image/upload/v1611086782/pfmszbvpaaru2ib3p0kn.jpg',
+		default: 'https://res.cloudinary.com/mario0284/image/upload/v1612036070/noimage_rcvccx.png',
 	},
 	followers: [{ type: ObjectId, ref: 'User' }],
 	following: [{ type: ObjectId, ref: 'User' }],
-});
+})
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema)
 
-export default User;
+export default User

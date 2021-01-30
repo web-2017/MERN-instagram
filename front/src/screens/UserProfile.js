@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { UserContext } from '../App';
-import { HEADERS_OPTIONS } from '../config/KEYS';
-import loglevel from '../middleware/loglevel';
+import React, { useEffect, useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { UserContext } from '../App'
+import { HEADERS_OPTIONS } from '../config/KEYS'
+import loglevel from '../middleware/loglevel'
 
 // styles
 import {
@@ -12,36 +12,34 @@ import {
 	ProfileFollowerContainer,
 	GalleryContainer,
 	GalleryItem,
-} from '../assets/ProfileStyles';
+} from '../assets/ProfileStyles'
 
 const UserProfile = () => {
-	const { state, dispatch } = useContext(UserContext);
-	const { userId } = useParams();
-	const [userProfile, setProfile] = useState(null);
-	const [showFollow, setShowFollow] = useState(
-		state ? !state.following.includes(userId) : true
-	);
+	const { state, dispatch } = useContext(UserContext)
+	const { userId } = useParams()
+	const [userProfile, setProfile] = useState(null)
+	const [showFollow, setShowFollow] = useState(state ? !state.following.includes(userId) : true)
 
 	useEffect(() => {
-		getMyPost();
-	}, []);
+		getMyPost()
+	}, [])
 
 	const getMyPost = async () => {
 		try {
 			const response = await fetch(`/user/${userId}`, {
 				method: 'get',
 				headers: HEADERS_OPTIONS,
-			});
+			})
 
-			const result = await response.json();
+			const result = await response.json()
 
-			setProfile(result);
+			setProfile(result)
 
-			loglevel.debug(result);
+			loglevel.debug(result)
 		} catch (e) {
-			loglevel.error(e);
+			loglevel.error(e)
 		}
-	};
+	}
 
 	const followUserHandler = async () => {
 		try {
@@ -51,15 +49,15 @@ const UserProfile = () => {
 				body: JSON.stringify({
 					followId: userId,
 				}),
-			});
+			})
 
-			const result = await response.json();
-			const { following, followers } = result;
+			const result = await response.json()
+			const { following, followers } = result
 			dispatch({
 				type: 'UPDATE',
 				payload: { following, followers },
-			});
-			localStorage.setItem('user', JSON.stringify(result));
+			})
+			localStorage.setItem('user', JSON.stringify(result))
 			setProfile((prevState) => {
 				return {
 					...prevState,
@@ -67,16 +65,16 @@ const UserProfile = () => {
 						...prevState.user,
 						followers: [...prevState.user.followers, result._id],
 					},
-				};
-			});
+				}
+			})
 
-			setShowFollow(false);
+			setShowFollow(false)
 
-			loglevel.debug(result);
+			loglevel.debug(result)
 		} catch (e) {
-			loglevel.error(e);
+			loglevel.error(e)
 		}
-	};
+	}
 
 	const unFollowUserHandler = async () => {
 		try {
@@ -86,21 +84,21 @@ const UserProfile = () => {
 				body: JSON.stringify({
 					unFollowId: userId,
 				}),
-			});
+			})
 
-			const result = await response.json();
+			const result = await response.json()
 
 			dispatch({
 				type: 'UPDATE',
 				payload: { following: result.following, followers: result.followers },
-			});
+			})
 
-			localStorage.setItem('user', JSON.stringify(result));
+			localStorage.setItem('user', JSON.stringify(result))
 
 			setProfile((prevState) => {
 				const newFollower = prevState.user.followers.filter((id) => {
-					return id !== result._id;
-				});
+					return id !== result._id
+				})
 
 				return {
 					...prevState,
@@ -108,22 +106,22 @@ const UserProfile = () => {
 						...prevState.user,
 						followers: newFollower,
 					},
-				};
-			});
+				}
+			})
 
-			setShowFollow(true);
-			loglevel.debug(result);
+			setShowFollow(true)
+			loglevel.debug(result)
 		} catch (e) {
-			loglevel.error(e);
+			loglevel.error(e)
 		}
-	};
+	}
 
 	return (
 		<ProfileContainer>
 			<ProfileHeader>
 				<div>
 					<div>
-						<ImageAvatar src={userProfile?.user?.image} alt={state?.name} />
+						<ImageAvatar src={userProfile?.user?.pic} alt={state?.name} />
 					</div>
 				</div>
 
@@ -137,16 +135,16 @@ const UserProfile = () => {
 						<h6>{userProfile?.user?.following.length} following </h6>
 						{showFollow ? (
 							<button
-								className='btn waves-effect waves-light blue darken-2'
-								type='submit'
+								className="btn waves-effect waves-light blue darken-2"
+								type="submit"
 								onClick={() => followUserHandler()}
 							>
 								Follow
 							</button>
 						) : (
 							<button
-								className='btn waves-effect waves-light blue darken-2'
-								type='submit'
+								className="btn waves-effect waves-light blue darken-2"
+								type="submit"
 								onClick={() => unFollowUserHandler()}
 							>
 								unfollow
@@ -161,7 +159,7 @@ const UserProfile = () => {
 				))}
 			</GalleryContainer>
 		</ProfileContainer>
-	);
-};
+	)
+}
 
-export default UserProfile;
+export default UserProfile
