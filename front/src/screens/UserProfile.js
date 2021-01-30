@@ -15,10 +15,12 @@ import {
 } from '../assets/ProfileStyles';
 
 const UserProfile = () => {
-	const [userProfile, setProfile] = useState(null);
-	const [showFollow, setShowFollow] = useState(true);
-	const { userId } = useParams();
 	const { state, dispatch } = useContext(UserContext);
+	const { userId } = useParams();
+	const [userProfile, setProfile] = useState(null);
+	const [showFollow, setShowFollow] = useState(
+		state ? !state.following.includes(userId) : true
+	);
 
 	useEffect(() => {
 		getMyPost();
@@ -121,7 +123,7 @@ const UserProfile = () => {
 			<ProfileHeader>
 				<div>
 					<div>
-						<ImageAvatar src={state?.avatar} alt={state?.name} />
+						<ImageAvatar src={userProfile?.user?.image} alt={state?.name} />
 					</div>
 				</div>
 

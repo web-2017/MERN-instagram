@@ -59,7 +59,7 @@ const Profile = () => {
 					method: 'put',
 					headers: HEADERS_OPTIONS,
 					body: JSON.stringify({
-						avatar: data.url,
+						image: data.url,
 					}),
 				})
 					.then((res) => res.json())
@@ -67,9 +67,9 @@ const Profile = () => {
 						console.log(result);
 						localStorage.setItem(
 							'user',
-							JSON.stringify({ ...state, avatar: result.avatar })
+							JSON.stringify({ ...state, image: result.image })
 						);
-						dispatch({ type: 'AVATAR', payload: result.avatar });
+						dispatch({ type: 'AVATAR', payload: result.image });
 					});
 			})
 			.catch((err) => {
@@ -86,7 +86,7 @@ const Profile = () => {
 			<ProfileHeader>
 				<div>
 					<div>
-						<ImageAvatar src={state?.avatar} alt={state?.name} />
+						<ImageAvatar src={state?.image} alt={state?.name} />
 					</div>
 				</div>
 

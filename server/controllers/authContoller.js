@@ -8,7 +8,8 @@ export const protectedVerification = (req, res) => {
 };
 
 export const signUpUser = async (req, res) => {
-	let { name, email, password } = await req.body;
+	const { name, email, password, image } = await req.body;
+
 	if (!name) return res.status(422).json({ error: 'Пожалуйста, введите имя' });
 	if (!email)
 		return res.status(422).json({ error: 'Пожалуйста, введите email' });
@@ -19,9 +20,8 @@ export const signUpUser = async (req, res) => {
 	// if (email && password && !name) name = email
 
 	try {
-		const checkUser = await User.findOne({ email: email });
-
 		// Если email уже сушествует, ошибка
+		const checkUser = await User.findOne({ email: email });
 		if (checkUser)
 			return res
 				.status(422)
@@ -35,6 +35,7 @@ export const signUpUser = async (req, res) => {
 			name,
 			email,
 			password: hashPassword, // Зашифровали password
+			image: image,
 		});
 
 		await user.save();
@@ -48,6 +49,7 @@ export const signUpUser = async (req, res) => {
 
 export const signInUser = async (req, res) => {
 	const { email, password } = req.body;
+
 	if (!email || !password)
 		return res
 			.status(422)
@@ -66,12 +68,12 @@ export const signInUser = async (req, res) => {
 		const token = jwt.sign({ id: user._id }, JWT_TOKEN);
 
 		if (hashPassword) {
-			const { name, email, _id, avatar, followers, following } = user;
+			const { name, email, _id, avatar, followers, following, image } = user;
 			return res.status(200).json({
 				message: `Добро пожаловать ${name || email}`,
 				token,
 				id: _id,
-				user: { id: _id, name, email, avatar, followers, following },
+				user: { id: _id, name, email, avatar, followers, following, image },
 			});
 		} else {
 			return res.status(422).json({ error: `Неправильный пароль` });
