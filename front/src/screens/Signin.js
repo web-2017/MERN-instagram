@@ -10,6 +10,7 @@ export const SignIn = () => {
 	const history = useHistory();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [isError, setError] = useState(false);
 
 	const SignInPostData = async () => {
 		const data = { email, password };
@@ -33,8 +34,12 @@ export const SignIn = () => {
 			const result = await response.json();
 
 			if (result.error) {
-				Toast(result.error, true);
 				console.error(result);
+				setError(true);
+				setTimeout(() => {
+					setError(false);
+				}, 2000);
+				return Toast(result.error, true);
 			} else {
 				console.info(result);
 
@@ -52,6 +57,7 @@ export const SignIn = () => {
 			console.error(e);
 		}
 	};
+
 	return (
 		<div className='myCard container '>
 			<div className='card auth-card input-field '>
@@ -74,6 +80,7 @@ export const SignIn = () => {
 					className='btn waves-effect waves-light blue darken-2'
 					type='submit'
 					onClick={() => SignInPostData()}
+					disabled={isError}
 				>
 					Login
 				</button>

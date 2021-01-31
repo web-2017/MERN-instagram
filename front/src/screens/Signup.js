@@ -14,6 +14,7 @@ export const SignUp = () => {
 	const [password, setPassword] = useState('');
 	const [image, setImage] = useState('');
 	const [url, setUrl] = useState('');
+	const [isError, setError] = useState(false);
 
 	useEffect(() => {
 		if (url) {
@@ -80,6 +81,11 @@ export const SignUp = () => {
 			if (result.error) {
 				Toast(result.error, true);
 				console.error(result);
+
+				setError(true);
+				setTimeout(() => {
+					setError(false);
+				}, 2000);
 			} else {
 				Toast(`Добро пожаловать!`);
 				history.push('/signin');
@@ -135,6 +141,7 @@ export const SignUp = () => {
 					className='btn waves-effect waves-light #64b5f6 blue darken-1'
 					type='submit'
 					onClick={() => SignUpData()}
+					disabled={isError}
 				>
 					SignUp
 				</button>
