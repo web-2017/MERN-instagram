@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { UserContext } from '../App'
-import { CLOUDINARY_URL, PUBLIC_URL, HEADERS_OPTIONS } from '../config/KEYS'
-import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData'
-import loglevel from '../middleware/loglevel'
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../App';
+import { CLOUDINARY_URL, PUBLIC_URL } from '../config/KEYS';
+import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData';
 
 // styles
 import {
@@ -12,42 +11,45 @@ import {
 	ProfileFollowerContainer,
 	GalleryContainer,
 	GalleryItem,
-} from '../assets/ProfileStyles'
+} from '../assets/ProfileStyles';
 
 const Profile = () => {
-	const [posts, setPosts] = useState([])
-	const [file, setFile] = useState(null)
-	const { state, dispatch } = useContext(UserContext)
+	const [posts, setPosts] = useState([]);
+	const [file, setFile] = useState(null);
+	const { state, dispatch } = useContext(UserContext);
 
 	useEffect(() => {
-		getMyPost()
-	}, [])
+		getMyPost();
+	}, []);
 
 	useEffect(() => {
 		if (file) {
-			createImageHandler()
+			createImageHandler();
 		}
-	}, [file])
+	}, [file]);
 
 	const getMyPost = async () => {
 		try {
 			const response = await fetch(`${PUBLIC_URL}/mypost`, {
 				method: 'get',
-				headers: HEADERS_OPTIONS,
-			})
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
 
-			const result = await response.json()
+			const result = await response.json();
 
-			setPosts(result)
+			setPosts(result);
 
-			loglevel.debug(result)
+			console.debug(result);
 		} catch (e) {
-			loglevel.error(e)
+			console.error(e);
 		}
-	}
+	};
 
 	const createImageHandler = async () => {
-		const data = await CloundaryImagePostData(file)
+		const data = await CloundaryImagePostData(file);
 
 		await fetch(CLOUDINARY_URL, {
 			method: 'put',
@@ -57,26 +59,32 @@ const Profile = () => {
 			.then((data) => {
 				fetch('/updateavatar', {
 					method: 'put',
-					headers: HEADERS_OPTIONS,
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
 					body: JSON.stringify({
 						image: data.url,
 					}),
 				})
 					.then((res) => res.json())
 					.then((result) => {
-						console.log(result)
-						localStorage.setItem('user', JSON.stringify({ ...state, image: result.image }))
-						dispatch({ type: 'AVATAR', payload: result.image })
-					})
+						console.log(result);
+						localStorage.setItem(
+							'user',
+							JSON.stringify({ ...state, image: result.image })
+						);
+						dispatch({ type: 'AVATAR', payload: result.image });
+					});
 			})
 			.catch((err) => {
-				console.log(err)
-			})
-	}
+				console.log(err);
+			});
+	};
 
 	const updatePhoto = (file) => {
-		setFile(file)
-	}
+		setFile(file);
+	};
 
 	return (
 		<ProfileContainer>
@@ -96,13 +104,16 @@ const Profile = () => {
 						<h6>{state?.following?.length} following</h6>
 					</ProfileFollowerContainer>
 				</div>
-				<div className="file-field input-field" style={{ margin: '10px' }}>
-					<div className="btn #64b5f6 blue darken-1">
+				<div className='file-field input-field' style={{ margin: '10px' }}>
+					<div className='btn #64b5f6 blue darken-1'>
 						<span>Update Avatar</span>
-						<input type="file" onChange={(e) => updatePhoto(e.target.files[0])} />
+						<input
+							type='file'
+							onChange={(e) => updatePhoto(e.target.files[0])}
+						/>
 					</div>
-					<div className="file-path-wrapper">
-						<input className="file-path validate" type="text" />
+					<div className='file-path-wrapper'>
+						<input className='file-path validate' type='text' />
 					</div>
 				</div>
 			</ProfileHeader>
@@ -112,7 +123,7 @@ const Profile = () => {
 				))}
 			</GalleryContainer>
 		</ProfileContainer>
-	)
-}
+	);
+};
 
-export default Profile
+export default Profile;

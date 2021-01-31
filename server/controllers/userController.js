@@ -24,7 +24,7 @@ export const userAvatarController = async (req, res) => {
 	try {
 		User.findByIdAndUpdate(
 			req.user._id,
-			{ $set: { image: req.body.image } },
+			{ $set: { pic: req.body.pic } },
 			{ new: true },
 			(err, result) => {
 				if (err) {

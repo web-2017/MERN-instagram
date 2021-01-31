@@ -1,5 +1,4 @@
 import { PUBLIC_URL } from '../config/KEYS';
-import loglevel from '../middleware/loglevel';
 
 import API from '../constants/API';
 
@@ -19,11 +18,11 @@ class SubscribeUserPostClass {
 
 			const result = await response.json();
 
-			loglevel.debug(result);
+			console.debug(result);
 
 			return result;
 		} catch (e) {
-			loglevel.error(e);
+			console.error(e);
 		}
 	}
 
@@ -39,10 +38,10 @@ class SubscribeUserPostClass {
 
 			const result = await response.json();
 
-			loglevel.debug(result);
+			console.debug(result);
 			return result;
 		} catch (e) {
-			loglevel.error(e);
+			console.error(e);
 		}
 	}
 
@@ -58,11 +57,11 @@ class SubscribeUserPostClass {
 
 			const result = await response.json();
 
-			loglevel.debug(result);
+			console.debug(result);
 
 			return result;
 		} catch (e) {
-			loglevel.error(e);
+			console.error(e);
 		}
 	}
 
@@ -76,11 +75,11 @@ class SubscribeUserPostClass {
 
 			const result = await response.json();
 
-			loglevel.debug(result);
+			console.debug(result);
 
 			return result;
 		} catch (e) {
-			loglevel.error(e);
+			console.error(e);
 		}
 	}
 
@@ -95,7 +94,7 @@ class SubscribeUserPostClass {
 
 		const result = await response.json();
 
-		loglevel.debug(result);
+		console.debug(result);
 
 		return result;
 	}
@@ -109,11 +108,11 @@ class SubscribeUserPostClass {
 
 			const result = await response.json();
 
-			loglevel.debug(result);
+			console.debug(result);
 
 			return result;
 		} catch (e) {
-			loglevel.error(e);
+			console.error(e);
 		}
 	}
 }
