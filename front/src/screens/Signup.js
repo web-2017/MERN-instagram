@@ -13,7 +13,7 @@ export const SignUp = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [image, setImage] = useState('');
-	const [url, setUrl] = useState('');
+	const [url, setUrl] = useState(undefined);
 	const [isError, setError] = useState(false);
 
 	useEffect(() => {
@@ -52,28 +52,17 @@ export const SignUp = () => {
 		}
 
 		try {
-			const checkIfUrlImageExist = () => {
-				const obj = url
-					? {
-							name,
-							email,
-							password,
-							pic: url,
-					  }
-					: {
-							name,
-							email,
-							password,
-					  };
-				return obj;
-			};
-
 			const response = await fetch(`${PUBLIC_URL}/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(checkIfUrlImageExist()),
+				body: JSON.stringify({
+					name,
+					email,
+					password,
+					pic: url,
+				}),
 			});
 			const result = await response.json();
 			console.info('Поздравляем. ', result);
