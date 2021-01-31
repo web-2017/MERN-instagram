@@ -9,7 +9,7 @@ export const protectedVerification = (req, res) => {
 
 export const signUp = async (req, res) => {
 	const { name, email, password, pic } = req.body;
-	console.log('pic', pic);
+
 	if (!email || !password || !name) {
 		return res.status(422).json({ error: 'Все поля обязательны!!!' });
 	}
@@ -25,17 +25,15 @@ export const signUp = async (req, res) => {
 		// bcrypt password
 		const hashPassword = await bcrypt.hash(req.body.password, 12);
 
-		// Создали нового пользователя
 		const user = new User({
 			name,
 			email,
 			password: hashPassword, // Зашифровали password
-			pic,
+			pic: pic && pic,
 		});
 
 		await user.save();
-
-		res.status(200).json({ message: 'Success' });
+		res.status(200).json({ message: 'Success', user });
 		console.log(`Пользователь ${req.body.email} создан`);
 	} catch (e) {
 		console.log(e);
@@ -66,7 +64,7 @@ export const signIn = async (req, res) => {
 
 		if (hashPassword) {
 			const { name, email, _id, followers, following, pic } = user;
-			console.log(222, user);
+			console.log('SignIn user', user);
 			return res.status(200).json({
 				message: `Добро пожаловать ${name || email}`,
 				token,

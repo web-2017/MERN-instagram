@@ -31,7 +31,6 @@ export const SignIn = () => {
 			});
 
 			const result = await response.json();
-			console.log(123, result);
 
 			if (result.error) {
 				Toast(result.error, true);

@@ -45,24 +45,34 @@ export const SignUp = () => {
 	const uploadFields = async () => {
 		// check email and password
 		if (!validateEmail(email)) {
-			Toast(`Не правильный Email`, true);
-			return;
+			return Toast(`Не правильный Email`, true);
 		} else if (password.length < 5) {
-			Toast(`Пароль должен быть больше 5 символов!`, true);
-			return;
+			return Toast(`Пароль должен быть больше 5 символов!`, true);
 		}
+
 		try {
+			const checkIfUrlImageExist = () => {
+				const obj = url
+					? {
+							name,
+							email,
+							password,
+							pic: url,
+					  }
+					: {
+							name,
+							email,
+							password,
+					  };
+				return obj;
+			};
+
 			const response = await fetch(`${PUBLIC_URL}/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({
-					name,
-					email,
-					password,
-					pic: url,
-				}),
+				body: JSON.stringify(checkIfUrlImageExist()),
 			});
 			const result = await response.json();
 			console.info('Поздравляем. ', result);
