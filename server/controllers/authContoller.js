@@ -8,7 +8,7 @@ export const protectedVerification = (req, res) => {
 };
 
 export const signUp = async (req, res) => {
-	const { name, email, password, pic } = req.body;
+	const { name, email, password, image } = req.body;
 
 	if (!email || !password || !name) {
 		return res.status(422).json({ error: 'Все поля обязательны!!!' });
@@ -29,7 +29,7 @@ export const signUp = async (req, res) => {
 			name,
 			email,
 			password: hashPassword, // Зашифровали password
-			pic: pic && pic,
+			image,
 		});
 
 		await user.save();
@@ -63,13 +63,13 @@ export const signIn = async (req, res) => {
 		const token = jwt.sign({ id: user._id }, JWT_TOKEN);
 
 		if (hashPassword) {
-			const { name, email, _id, followers, following, pic } = user;
+			const { name, email, _id, followers, following, image } = user;
 			console.log('SignIn user', user);
 			return res.status(200).json({
 				message: `Добро пожаловать ${name || email}`,
 				token,
 				id: _id,
-				user: { id: _id, name, pic, email, followers, following },
+				user: { id: _id, name, image, email, followers, following },
 			});
 		} else {
 			return res.status(422).json({ error: `Неправильный пароль` });

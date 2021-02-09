@@ -6,16 +6,17 @@ export const reducer = (state, { payload, type }) => {
 			return payload;
 		case 'CLEAR':
 			return null;
-		case 'AVATAR':
-			return {
-				...state,
-				avatar: payload,
-			};
+
 		case 'UPDATE':
 			return {
 				...state,
 				followers: payload.followers,
 				following: payload.following,
+			};
+		case 'UPDATEPIC':
+			return {
+				...state,
+				avatar: payload,
 			};
 		default:
 			return state;

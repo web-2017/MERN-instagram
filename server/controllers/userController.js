@@ -15,20 +15,20 @@ export const userController = async (req, res) => {
 				});
 		})
 		.catch((err) => {
-			return res.status(404).json({ error: 'User not found' });
+			return res.status(404).json({ error: 'User not found: ' + err });
 		});
 };
 
 // set profile avatar picture
-export const userAvatarController = async (req, res) => {
+export const userUpdateProfileImage = async (req, res) => {
 	try {
 		User.findByIdAndUpdate(
 			req.user._id,
-			{ $set: { pic: req.body.pic } },
+			{ $set: { image: req.body.image } },
 			{ new: true },
 			(err, result) => {
 				if (err) {
-					return res.status(422).json({ error: 'pic canot post' });
+					return res.status(422).json({ error: 'pic cannot post' });
 				}
 				res.json(result);
 			}

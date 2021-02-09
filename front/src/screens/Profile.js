@@ -15,7 +15,7 @@ import {
 
 const Profile = () => {
 	const [posts, setPosts] = useState([]);
-	const [file, setFile] = useState(null);
+	const [image, setFile] = useState(null);
 	const { state, dispatch } = useContext(UserContext);
 
 	useEffect(() => {
@@ -23,10 +23,10 @@ const Profile = () => {
 	}, []);
 
 	useEffect(() => {
-		if (file) {
+		if (image) {
 			createImageHandler();
 		}
-	}, [file]);
+	}, [image]);
 
 	const getMyPost = async () => {
 		try {
@@ -42,6 +42,7 @@ const Profile = () => {
 
 			setPosts(result);
 
+
 			console.debug(result);
 		} catch (e) {
 			console.error(e);
@@ -49,7 +50,7 @@ const Profile = () => {
 	};
 
 	const createImageHandler = async () => {
-		const data = await CloundaryImagePostData(file);
+		const data = await CloundaryImagePostData(image);
 
 		await fetch(CLOUDINARY_URL, {
 			method: 'put',
@@ -57,7 +58,7 @@ const Profile = () => {
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				fetch('/updateavatar', {
+				fetch('/updatepic', {
 					method: 'put',
 					headers: {
 						'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ const Profile = () => {
 							'user',
 							JSON.stringify({ ...state, image: result.image })
 						);
-						dispatch({ type: 'AVATAR', payload: result.image });
+						dispatch({ type: 'UPDATEPIC', payload: result.image });
 					});
 			})
 			.catch((err) => {
@@ -82,8 +83,8 @@ const Profile = () => {
 			});
 	};
 
-	const updatePhoto = (file) => {
-		setFile(file);
+	const updatePhoto = (img) => {
+		setFile(img);
 	};
 
 	return (
@@ -91,7 +92,7 @@ const Profile = () => {
 			<ProfileHeader>
 				<div>
 					<div>
-						<ImageAvatar src={state?.pic} alt={state?.name} />
+						<ImageAvatar src={state?.image} alt={state?.name} />
 					</div>
 				</div>
 

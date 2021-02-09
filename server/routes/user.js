@@ -3,7 +3,7 @@ import requireLogin from '../middleware/requireLogin.js';
 
 import {
 	userController,
-	userAvatarController,
+	userUpdateProfileImage,
 	followUserController,
 	unFollowUserController,
 } from '../controllers/userController.js';
@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 router
 	.get('/user/:id', requireLogin, userController)
-	.put('/updateavatar', requireLogin, userAvatarController)
+	.put('/updatepic', requireLogin, userUpdateProfileImage)
 	.put('/follow', requireLogin, followUserController)
 	.put('/unfollow', requireLogin, unFollowUserController);
 
