@@ -20,9 +20,10 @@ const HomeListPosts = ({
 	const { state } = useContext(UserContext);
 	const { _id: postedId, name: postedByName } = post.postedBy;
 	const { _id: id } = post;
+	console.log(state)
 
 	const checkIsCurrentUserHandler = () => {
-		return post.postedBy._id !== state.id
+		return post.postedBy._id !== state._id
 			? `/profile/${postedId}`
 			: `/profile/`;
 	};
@@ -34,7 +35,7 @@ const HomeListPosts = ({
 					<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
 				</h5>
 				<div className='col flow-text'>
-					{postedId === state.id && (
+					{postedId === state._id && (
 						<span>
 							<i className='material-icons' onClick={() => deletePost(id)}>
 								delete
@@ -50,7 +51,7 @@ const HomeListPosts = ({
 			<CardContent>
 				<i className='small material-icons red-text'>favorite</i>
 
-				{post.likes.includes(state.id) ? (
+				{post.likes.includes(state._id) ? (
 					<i className='material-icons' onClick={() => unLikePostHandler(id)}>
 						thumb_down
 					</i>
@@ -72,7 +73,7 @@ const HomeListPosts = ({
 							</span>
 							<span> {comment.text}</span>
 
-							{comment.postedBy._id === state.id && (
+							{comment.postedBy._id === state._id && (
 								<i
 									className='material-icons'
 									title='remove'

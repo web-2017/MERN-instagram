@@ -43,7 +43,7 @@ const Profile = () => {
 			setPosts(result);
 
 
-			console.debug(result);
+			console.log(result);
 		} catch (e) {
 			console.error(e);
 		}
@@ -67,6 +67,7 @@ const Profile = () => {
 					body: JSON.stringify({
 						image: data.url,
 					}),
+
 				})
 					.then((res) => res.json())
 					.then((result) => {
@@ -76,6 +77,7 @@ const Profile = () => {
 							JSON.stringify({ ...state, image: result.image })
 						);
 						dispatch({ type: 'UPDATEPIC', payload: result.image });
+						window.location.reload()
 					});
 			})
 			.catch((err) => {

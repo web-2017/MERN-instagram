@@ -61,7 +61,7 @@ export const SignUp = () => {
 					name,
 					email,
 					password,
-					pic: url,
+					image: url,
 				}),
 			});
 			const result = await response.json();
