@@ -20,7 +20,6 @@ const HomeListPosts = ({
 	const { state } = useContext(UserContext);
 	const { _id: postedId, name: postedByName } = post.postedBy;
 	const { _id: id } = post;
-	console.log(state)
 
 	const checkIsCurrentUserHandler = () => {
 		return post.postedBy._id !== state._id
@@ -45,7 +44,7 @@ const HomeListPosts = ({
 				</div>
 			</HomeCardTitle>
 			<CardImage className='card-image'>
-				<img style={{ width: '100%' }} src={post.image} alt='' />
+				<img style={{ width: '100%', height: '100%' }} src={post.image} alt='' />
 				<span className='card-title'>Card Title</span>
 			</CardImage>
 			<CardContent>

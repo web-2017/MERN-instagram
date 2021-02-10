@@ -6,7 +6,7 @@ export const HomeContainer = styled.div`
 `;
 export const HomeCard = styled.div`
 	max-width: 300px;
-	padding: 20px;
+	padding: 15px 10px;
 	height: max-content;
 	margin: 26px auto;
 `;
