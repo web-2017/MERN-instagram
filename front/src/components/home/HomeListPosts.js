@@ -18,12 +18,12 @@ const HomeListPosts = ({
 	removeCommentHandler,
 }) => {
 	const { state } = useContext(UserContext);
-	const { _id: postedId, name: postedByName } = post.postedBy;
-	const { _id: id } = post;
+	const { _id: postId } = post
+	const { _id: postedById, name: postedByName } = post.postedBy;
 
 	const checkIsCurrentUserHandler = () => {
-		return post.postedBy._id !== state._id
-			? `/profile/${postedId}`
+		return post.postedBy._id !== state.id
+			? `/profile/${postedById}`
 			: `/profile/`;
 	};
 
@@ -34,9 +34,9 @@ const HomeListPosts = ({
 					<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
 				</h5>
 				<div className='col flow-text'>
-					{postedId === state._id && (
+					{postedById === state._id && (
 						<span>
-							<i className='material-icons' onClick={() => deletePost(id)}>
+							<i className='material-icons' onClick={() => deletePost(postId)}>
 								delete
 							</i>
 						</span>
@@ -51,11 +51,11 @@ const HomeListPosts = ({
 				<i className='small material-icons red-text'>favorite</i>
 
 				{post.likes.includes(state._id) ? (
-					<i className='material-icons' onClick={() => unLikePostHandler(id)}>
+					<i className='material-icons' onClick={() => unLikePostHandler(postId)}>
 						thumb_down
 					</i>
 				) : (
-					<i className='material-icons' onClick={() => likePostHandler(id)}>
+					<i className='material-icons' onClick={() => likePostHandler(postId)}>
 						thumb_up
 					</i>
 				)}
@@ -72,11 +72,11 @@ const HomeListPosts = ({
 							</span>
 							<span> {comment.text}</span>
 
-							{comment.postedBy._id === state._id && (
+							{comment.postedBy._id === state.id && (
 								<i
 									className='material-icons'
 									title='remove'
-									onClick={() => removeCommentHandler(id, comment._id)}
+									onClick={() => removeCommentHandler(postId, comment._id)}
 								>
 									remove
 								</i>
@@ -88,7 +88,7 @@ const HomeListPosts = ({
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						makeComment(event.target[0].value, id);
+						makeComment(event.target[0].value, postId);
 						event.target[0].value = '';
 					}}
 				>
