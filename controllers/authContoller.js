@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
-import { JWT_TOKEN } from '../keys.js';
+import {JWT_SECRET} from '../config/keys.js'
 
 export const protectedVerification = (req, res) => {
 	res.json('router protected');
@@ -60,7 +60,7 @@ export const signIn = async (req, res) => {
 		// сравниваем пароль при логине
 		const hashPassword = await bcrypt.compare(password, user.password);
 		// создали token
-		const token = jwt.sign({ id: user._id }, JWT_TOKEN);
+		const token = jwt.sign({ id: user._id }, JWT_SECRET);
 
 		if (hashPassword) {
 			const { name, email, _id, followers, following, image } = user;

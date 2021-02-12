@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 
-import {JWT_TOKEN} from "../keys.js";
+import {JWT_SECRET} from '../config/keys.js'
+
 import User from "../models/user.js";
 
 
@@ -14,7 +15,7 @@ export default async (req, res, next) => {
     const token = authorization.replace("Bearer ", "")
 
     try {
-        const verified = jwt.verify(token, JWT_TOKEN);
+        const verified = jwt.verify(token, JWT_SECRET);
 
         if (!verified) return res.status(401).json({error: "you must be logged in"})
 

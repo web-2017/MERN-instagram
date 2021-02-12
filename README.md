@@ -1,1 +1,1 @@
-MERN instagram clone 
+yarn dev
