@@ -1,13 +1,15 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-// nodemailer
+// libs
 import nodemailer from 'nodemailer'
 import sendgridTransport from 'nodemailer-sendgrid-transport'
 
+// components
 import User from '../models/user.js';
 import {JWT_SECRET, SEND_GRID_KEY} from '../config/keys.js'
 
+// create send mail
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
         api_key: SEND_GRID_KEY
@@ -55,7 +57,6 @@ export const signUp = async (req, res) => {
 				<p>Пожалуйста пройдите по ссылке <a href="https://instagram-clone-app1.herokuapp.com/signin">instagram-clone-app1</a></p>
 			`
         })
-
 
         res.status(200).json({message: 'Success'});
 
