@@ -34,7 +34,7 @@ const HomeListPosts = ({
 					<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
 				</h5>
 				<div className='col flow-text'>
-					{postedById === state._id && (
+					{postedById === state.id && (
 						<span>
 							<i className='material-icons' onClick={() => deletePost(postId)}>
 								delete

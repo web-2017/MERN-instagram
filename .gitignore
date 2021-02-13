@@ -1,9 +1,10 @@
-node_modules
 .idea
 
-front/.eslintcache
-front/build
+#ftont
+.eslintcache
+build
+node_modules/
 
-config/production.env
-config/development.env
+#env
+development.env
 

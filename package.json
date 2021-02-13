@@ -1,16 +1,22 @@
 {
-  "name": "mern-instagram-indus",
+  "name": "mern-instagram-clone",
   "version": "1.0.0",
   "repository": "https://github.com/web-2017/MERN-instagram.git",
   "author": "https://github.com/web-2017",
-  "main": "index.js",
+  "main": "app.js",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "server": "NODE_ENV=production nodemon app.js",
     "front": "npm start --prefix front",
+    "start": "node app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix front && npm run build --prefix front",
     "dev": "concurrently \"npm run server\" \"npm run front\"",
     "kill": "concurrently -k"
+  },
+  "engines": {
+    "node": "14.15.4",
+    "npm": "6.14.10"
   },
   "dependencies": {
     "concurrently": "^5.3.0",

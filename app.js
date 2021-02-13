@@ -27,8 +27,10 @@ app.use(post)
 app.use(user)
 
 if(process.env.NODE_ENV == 'production') {
-    app.use(express.static('../front/build/'))
+    app.use(express.static('front/build'))
     app.get('*', (req, res) => {
+        console.log(11)
+
         res.sendFile(path.resolve(__dirname, 'front', 'build', 'index.html'))
     })
 }
