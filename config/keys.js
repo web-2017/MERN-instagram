@@ -11,3 +11,4 @@ dotenv.config({path:
 
 export const MONGO_URI = await process.env.MONGO_DB;
 export const JWT_SECRET = await process.env.JWT_SECRET;
+export const SEND_GRID_KEY = process.env.SEND_GRID_KEY;

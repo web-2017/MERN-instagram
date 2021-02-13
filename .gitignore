@@ -6,5 +6,5 @@ build
 node_modules/
 
 #env
-development.env
+config/development.env
 
