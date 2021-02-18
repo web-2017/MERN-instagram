@@ -9,7 +9,8 @@ export const allPostsController = async (req, res) => {
 	try {
 		const posts = await Post.find()
 			.populate('postedBy', '_id name')
-			.populate('comments.postedBy', '_id name');
+			.populate('comments.postedBy', '_id name')
+			.sort('-createdAt'); // later post come first
 
 		await res.json(posts);
 	} catch (e) {
@@ -22,7 +23,8 @@ export const subscribePostsController = async (req, res) => {
 		// if postedBy in following
 		const posts = await Post.find({ postedBy: { $in: req.user.following } })
 			.populate('postedBy', '_id name')
-			.populate('comments.postedBy', '_id name');
+			.populate('comments.postedBy', '_id name')
+			.sort('-createdAt'); // later post come first
 
 		res.json(posts);
 	} catch (e) {
