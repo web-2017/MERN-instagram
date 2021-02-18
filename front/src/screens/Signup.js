@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import Toast from '../components/Toast';
-import { CLOUDINARY_URL, PUBLIC_URL } from '../config/KEYS';
+import {KEYS} from '../config/KEYS';
 
 import { validateEmail } from '../filters/validateEmail';
 import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData';
+
+const {CLOUDINARY_URL, PUBLIC_URL} = KEYS
 
 export const SignUp = () => {
 	const history = useHistory();

@@ -18,6 +18,8 @@ import Profile from './screens/Profile';
 import UserProfile from './screens/UserProfile';
 import CreatePost from './screens/CreatePost';
 import SubscribesUserPost from './screens/SubscribesUserPost';
+import ResetPassword from './screens/ResetPassword';
+import NewPassword from './screens/NewPassword';
 
 import routesApi from './constants/routesApi';
 
@@ -26,6 +28,7 @@ import { reducer, initialState } from './store/userReducer';
 export const UserContext = createContext();
 
 const Routing = () => {
+
 	const history = useHistory();
 	const { dispatch } = useContext(UserContext);
 
@@ -33,7 +36,7 @@ const Routing = () => {
 		const user = JSON.parse(localStorage.getItem('user'));
 		if (user) {
 			dispatch({ type: 'USER', payload: user });
-		} else {
+		} else if (!history.location.pathname.startsWith('/reset')) {
 			history.push(`/${routesApi.login}`);
 		}
 	}, []);
@@ -61,6 +64,12 @@ const Routing = () => {
 				</Route>
 				<Route path='/myfollowingpost'>
 					<SubscribesUserPost />
+				</Route>
+				<Route exact path='/reset'>
+					<ResetPassword />
+				</Route>
+				<Route path='/reset/:token'>
+					<NewPassword />
 				</Route>
 			</Container>
 		</Switch>

@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { UserContext } from '../App';
 import { validateEmail } from '../filters/validateEmail';
 import Toast from '../components/Toast';
-import { PUBLIC_URL } from '../config/KEYS';
+import { KEYS } from '../config/KEYS';
 
 export const SignIn = () => {
 	const { state, dispatch } = useContext(UserContext);
@@ -23,7 +23,7 @@ export const SignIn = () => {
 		}
 
 		try {
-			const response = await fetch(`${PUBLIC_URL}/signin`, {
+			const response = await fetch(`${KEYS.PUBLIC_URL}/signin`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -85,7 +85,10 @@ export const SignIn = () => {
 					Login
 				</button>
 				<h6>
-					<Link to='signup'>Dont have an account?</Link>
+					<Link to='/signup'>Dont have an account?</Link>
+				</h6>
+				<h6>
+					<Link to='/reset'>reset password?</Link>
 				</h6>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
-import { PUBLIC_URL } from '../../config/KEYS'
+import {KEYS} from '../../config/KEYS'
 import API from '../../constants/API'
+const {PUBLIC_URL} = KEYS
 
 class HomeCrudClass {
 	constructor(token) {

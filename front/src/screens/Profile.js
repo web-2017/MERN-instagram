@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
+
 import { UserContext } from '../App';
-import { CLOUDINARY_URL, PUBLIC_URL } from '../config/KEYS';
+import { KEYS } from '../config/KEYS';
+
 import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData';
 
 // styles
@@ -12,6 +14,7 @@ import {
 	GalleryContainer,
 	GalleryItem,
 } from '../assets/ProfileStyles';
+
 
 const Profile = () => {
 	const [posts, setPosts] = useState([]);
@@ -30,7 +33,7 @@ const Profile = () => {
 
 	const getMyPost = async () => {
 		try {
-			const response = await fetch(`${PUBLIC_URL}/mypost`, {
+			const response = await fetch(`${KEYS.PUBLIC_URL}/mypost`, {
 				method: 'get',
 				headers: {
 					'Content-Type': 'application/json',
@@ -52,7 +55,7 @@ const Profile = () => {
 	const createImageHandler = async () => {
 		const data = await CloundaryImagePostData(image);
 
-		await fetch(CLOUDINARY_URL, {
+		await fetch(KEYS.CLOUDINARY_URL, {
 			method: 'put',
 			body: data,
 		})

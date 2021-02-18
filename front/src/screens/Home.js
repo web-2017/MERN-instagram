@@ -67,7 +67,7 @@ const Home = () => {
 
 	return (
 		<HomeContainer>
-			{data.map((post) => {
+			{data?.map((post) => {
 				return (
 					<HomeListPosts
 						key={post._id}

@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Toast from '../components/Toast';
 
-import { CLOUDINARY_URL, PUBLIC_URL } from '../config/KEYS';
+
 import { CloundaryImagePostData } from '../helpers/CloundaryImagePostData';
 
 import { PostCreateContainer } from '../assets/PostStyle';
+import {KEYS} from '../config/KEYS';
+const {CLOUDINARY_URL, PUBLIC_URL} = KEYS
+
 
 export const CreatePost = () => {
 	const history = useHistory();
