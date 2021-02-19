@@ -18,12 +18,9 @@ const HomeListPosts = ({
 	removeCommentHandler,
 }) => {
 	const { state } = useContext(UserContext);
-	const { _id: postId } = post
-	const { _id: postedById, name: postedByName } = post.postedBy;
-
 	const checkIsCurrentUserHandler = () => {
-		return post.postedBy._id !== state.id
-			? `/profile/${postedById}`
+		return post.postedBy._id !== state._id
+			? `/profile/${post.postedBy._id}`
 			: `/profile/`;
 	};
 
@@ -31,12 +28,12 @@ const HomeListPosts = ({
 		<HomeCard className='card flex space-between'>
 			<HomeCardTitle>
 				<h5 style={{ margin: 0 }}>
-					<Link to={checkIsCurrentUserHandler}> {postedByName}</Link>
+					<Link to={checkIsCurrentUserHandler}> {post.postedBy.name}</Link>
 				</h5>
 				<div className='col flow-text'>
-					{postedById === state.id && (
+					{post.postedBy._id === state._id && (
 						<span>
-							<i className='material-icons' onClick={() => deletePost(postId)}>
+							<i className='material-icons' onClick={() => deletePost(post._id)}>
 								delete
 							</i>
 						</span>
@@ -51,11 +48,11 @@ const HomeListPosts = ({
 				<i className='small material-icons red-text'>favorite</i>
 
 				{post.likes.includes(state._id) ? (
-					<i className='material-icons' onClick={() => unLikePostHandler(postId)}>
+					<i className='material-icons' onClick={() => unLikePostHandler(post._id)}>
 						thumb_down
 					</i>
 				) : (
-					<i className='material-icons' onClick={() => likePostHandler(postId)}>
+					<i className='material-icons' onClick={() => likePostHandler(post._id)}>
 						thumb_up
 					</i>
 				)}
@@ -72,11 +69,11 @@ const HomeListPosts = ({
 							</span>
 							<span> {comment.text}</span>
 
-							{comment.postedBy._id === state.id && (
+							{comment.postedBy._id === state._id && (
 								<i
 									className='material-icons'
 									title='remove'
-									onClick={() => removeCommentHandler(postId, comment._id)}
+									onClick={() => removeCommentHandler(post._id, comment._id)}
 								>
 									remove
 								</i>
@@ -88,7 +85,7 @@ const HomeListPosts = ({
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						makeComment(event.target[0].value, postId);
+						makeComment(event.target[0].value, post._id);
 						event.target[0].value = '';
 					}}
 				>

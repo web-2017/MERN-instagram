@@ -89,8 +89,8 @@ export const signIn = async (req, res) => {
             return res.status(200).json({
                 message: `Добро пожаловать ${name || email}`,
                 token,
-                id: _id,
-                user: {id: _id, name, image, email, followers, following},
+                _id,
+                user: {_id, name, image, email, followers, following},
             })
         } else {
             return res.status(422).json({error: `Неправильный пароль`})

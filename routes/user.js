@@ -6,6 +6,7 @@ import {
 	userUpdateProfileImage,
 	followUserController,
 	unFollowUserController,
+	searchUsersHandler
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router
 	.get('/user/:id', requireLogin, userController)
 	.put('/updatepic', requireLogin, userUpdateProfileImage)
 	.put('/follow', requireLogin, followUserController)
-	.put('/unfollow', requireLogin, unFollowUserController);
+	.put('/unfollow', requireLogin, unFollowUserController)
+	.post('/search-users', searchUsersHandler)
 
 export default router;
