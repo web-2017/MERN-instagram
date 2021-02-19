@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 
 import { Link, useHistory } from 'react-router-dom';
+import M from 'materialize-css'
 
 import { UserContext } from '../App';
 
@@ -9,6 +10,12 @@ import '../App.css';
 export const Navbar = () => {
 	const history = useHistory();
 	const { state, dispatch } = useContext(UserContext);
+	const refModal = useRef(null)
+	const [search, setSearch] = useState('')
+
+	useEffect(()=> {
+		M.Modal.init(refModal.current);
+	}, [])
 
 	const logoutHandler = () => {
 		localStorage.clear();
@@ -20,6 +27,9 @@ export const Navbar = () => {
 		if (state) {
 			return (
 				<>
+					<li>
+						<i data-target="modal1" className="material-icons modal-trigger" >search</i>
+					</li>
 					<li>
 						<Link to='/profile'>Profile</Link>
 					</li>
@@ -62,6 +72,34 @@ export const Navbar = () => {
 				<ul id='nav-mobile' className='right hide-on-med-and-down'>
 					{renderMenuList()}
 				</ul>
+			</div>
+			<div id="modal1" className="modal" ref={refModal} style={{color: '#000'}}>
+				<div className="modal-content">
+					<h4>Modal Header</h4>
+					<input
+						type='text'
+						placeholder='search ussers'
+						required
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
+					<ul className="collection">
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+						<li className="collection-item">Alvin</li>
+					</ul>
+				</div>
+				<div className="modal-footer">
+					<a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
+				</div>
 			</div>
 		</nav>
 	);
