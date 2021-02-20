@@ -15,7 +15,8 @@
 		"rewrite": "0.0.1",
 		"styled-components": "^5.2.1",
 		"to": "^0.2.9",
-		"web-vitals": "^0.2.4"
+		"web-vitals": "^0.2.4",
+		"yarn": "^1.22.10"
 	},
 	"resolutions": {
 		"styled-components": "^5"
