@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "repository": "https://github.com/web-2017/MERN-instagram.git",
   "author": "https://github.com/web-2017",
-  "main": "app.js",
+  "main": "server.js",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "server": "NODE_ENV=production nodemon app.js",
+    "server": "NODE_ENV=production nodemon server.js",
     "front": "npm start --prefix front",
-    "start": "node app.js",
+    "start": "node server.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix front && npm run build --prefix front",
     "dev": "concurrently \"npm run server\" \"npm run front\"",
     "kill": "concurrently -k"

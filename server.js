@@ -1,5 +1,5 @@
 import express from 'express'
-const app = express()
+const server = express()
 import mongoose from 'mongoose'
 import path from 'path'
 const __dirname = path.resolve()
@@ -16,19 +16,19 @@ import {MONGO_URI} from './config/keys.js'
 
 const port = process.env.PORT || 5000
 
-// app.use(express.json())
-app.use(bodyParser.json({limit: "30mb", extended: true}));
-app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
-app.use(cors());
-app.use(morgan("dev"));
+// server.use(express.json())
+server.use(bodyParser.json({limit: "30mb", extended: true}));
+server.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
+server.use(cors());
+server.use(morgan("dev"));
 
-app.use(auth)
-app.use(post)
-app.use(user)
+server.use(auth)
+server.use(post)
+server.use(user)
 
 if(process.env.NODE_ENV === 'production') {
-    app.use(express.static('front/build'))
-    app.get('*', (req, res) => {
+    server.use(express.static('front/build'))
+    server.get('*', (req, res) => {
         console.log(11)
 
         res.sendFile(path.resolve(__dirname, 'front', 'build', 'index.html'))
@@ -50,7 +50,7 @@ try {
     process.exit(1)
 }
 
-app.listen(port, () => console.log(`Server running on port http://localhost:${port}`.yellow.bold))
+server.listen(port, () => console.log(`Server running on port http://localhost:${port}`.yellow.bold))
 
 
 
