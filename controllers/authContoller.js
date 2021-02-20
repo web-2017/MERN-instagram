@@ -8,7 +8,7 @@ import sendgridTransport from 'nodemailer-sendgrid-transport'
 
 // components
 import User from '../models/user.js'
-import {JWT_SECRET, SEND_GRID_KEY} from '../config/keys.js'
+import {JWT_SECRET, SEND_GRID_KEY, EMAIL} from '../config/keys.js'
 
 // create send mail
 const transporter = nodemailer.createTransport(
@@ -112,14 +112,14 @@ export const resetPassword = async (req, res) => {
             }
             user.resetToken = token
             user.expireToken = Date.now() + 3600000
-            user.save().then((result) => {
+            user.save().then(() => {
                 transporter.sendMail({
                     to: user.email,
                     from: 'webdevelope2017@gmail.com',
                     subject: 'password reset',
                     html: `
                      <p>You requested for password reset</p>
-                     <h5>click in this <a href="http://localhost:3000/reset/${token}">link</a> to reset password</h5>
+                     <h5>click in this <a href="${EMAIL}/reset/${token}">link</a> to reset password</h5>
                      `,
                 })
                 res.json({message: 'check your email'})
